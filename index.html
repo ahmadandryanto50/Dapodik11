@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAPODIK DIGITAL - Portal Web Ringkas</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+    
+    /* Mencegah scroll horizontal global pada seluruh halaman web luar */
+    html, body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    /* Animasi Transisi Halus */
+    .fade-in {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Kunci CSS Matrix untuk Pembekuan Baris & Kolom (Frozen Columns & Rows) */
+    .table-section-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .table-container {
+      overflow-x: scroll !important; /* Memaksa scrollbar horizontal wajib aktif & terlihat */
+      overflow-y: auto !important;
+      max-height: calc(100vh - 290px) !important; /* Agar scrollbar horizontal selalu berada di dalam viewport layar */
+      min-height: 320px !important;
+      position: relative;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background-color: #ffffff;
+      width: 100% !important; /* Memaksa wadah mengikuti lebar container induk */
+      max-width: 100% !important; /* Menghindari luapan lebar agar scrollbar terpicu */
+      display: block !important;
+      -webkit-overflow-scrolling: touch;
+      
+      /* Dukungan kompatibilitas Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #4f46e5 #f1f5f9;
+    }
+
+    /* Kolom Sticky Dasar dengan Background Solid Menghindari Teks Tembus */
+    .col-sticky-no, .col-sticky-nama {
+      position: sticky !important;
+      background-color: #ffffff !important; /* Latar belakang solid putih pekat */
+      box-shadow: 2px 0 5px -2px rgba(15, 23, 42, 0.1);
+    }
+
+    .col-sticky-no {
+      z-index: 12 !important;
+      width: 45px !important;
+      min-width: 45px !important;
+      max-width: 45px !important;
+      left: 0px !important;
+    }
+    .col-sticky-nama {
+      z-index: 10 !important;
+      box-shadow: 4px 0 8px -3px rgba(15, 23, 42, 0.15) !important;
+      width: 220px !important;
+      min-width: 220px !important;
+      max-width: 220px !important;
+      left: 45px !important;
+    }
+
+    /* Efek Hover Sinkron pada Kolom Sticky */
+    tr:hover td.col-sticky-no,
+    tr:hover td.col-sticky-nama {
+      background-color: #f1f5f9 !important; /* Warna hover selaras */
+    }
+
+    /* Baris Header Sticky */
+    th {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 20;
+      background-color: #0f172a !important; /* Latar belakang gelap solid */
+      color: #f8fafc !important;
+    }
+
+    /* Z-Index spesial untuk perpotongan baris header dan kolom sticky */
+    th.col-sticky-no { z-index: 45 !important; background-color: #0f172a !important; }
+    th.col-sticky-nama { z-index: 43 !important; background-color: #0f172a !important; }
+
+    /* Desain Scrollbar Kustom Premium & Terlihat Sangat Jelas */
+    .table-container::-webkit-scrollbar {
+      width: 10px !important;
+      height: 12px !important; /* Lebih tebal agar mudah diklik & terlihat */
+      display: block !important;
+    }
+    .table-container::-webkit-scrollbar-track {
+      background: #f1f5f9 !important;
+      border-radius: 99px !important;
+      display: block !important;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+      background: #4f46e5 !important; /* Warna Indigo premium agar kontras dan mencolok */
+      border-radius: 99px !important;
+      border: 3px solid #f1f5f9 !important;
+      display: block !important;
+    }
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: #3730a3 !important; /* Indigo gelap saat diarahkan kursor */
+    }
+
+    /* Memaksa elemen tabel memiliki struktur lebar kolom statis untuk memicu scrollbar */
+    #dataTable {
+      min-width: 1700px !important; /* Jaminan kolom meluap melewati layar sehingga wajib di-scroll */
+      width: 100% !important;
+      table-layout: fixed !important; /* Memaksa browser mematuhi lebar pixel kolom */
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+    }
+
+    /* Animasi Mengambang Naik Turun (Floating Effect) untuk Logo */
+    .float-logo {
+      animation: floatAnimation 3.5s ease-in-out infinite;
+    }
+    @keyframes floatAnimation {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <!-- ==================== HALAMAN AUTENTIKASI LOGIN ==================== -->
+  <div id="loginPage" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 px-4">
+    <div class="absolute w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-3xl -top-40 -left-40 pointer-events-none"></div>
+    <div class="absolute w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl -bottom-40 -right-40 pointer-events-none"></div>
+
+    <!-- Wadah Login dengan efek blur kaca -->
+    <div class="w-full max-w-md p-8 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 relative z-10 isolate">
+      <div class="text-center mb-8">
+        <!-- Logo Sekolah Bulat Sempurna & Efek Melayang Naik-Turun -->
+        <div class="inline-flex items-center justify-center w-24 h-24 mb-4 rounded-full border-2 border-indigo-100 shadow-lg bg-white overflow-hidden p-1.5 float-logo">
+          <img src="https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg" 
+               alt="Logo Login" 
+               class="w-full h-full object-contain rounded-full" 
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=120&auto=format&fit=crop&q=60';">
+        </div>
+        <h2 id="loginAppTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight">DAPODIK DIGITAL</h2>
+        <p id="loginAppSubtitle" class="text-sm text-slate-500 mt-1">Sistem Informasi Manajemen Sekolah Ringkas & Modern</p>
+      </div>
+
+      <!-- Notifikasi Alert Demo -->
+      <div id="demoNotice" class="hidden mb-4 p-3.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl text-xs flex gap-2.5">
+        <i class="fa-solid fa-triangle-exclamation text-base mt-0.5 animate-bounce text-amber-600"></i>
+        <div>
+          <span class="font-bold">Mode Preview Aktif!</span> Anda sedang menggunakan simulasi lokal. Akun bawaan: <span class="font-bold underline">admin</span> / <span class="font-bold underline">admin123</span> atau <span class="font-bold underline">user</span> / <span class="font-bold underline">user123</span>
+        </div>
+      </div>
+
+      <form onsubmit="handleLogin(event)" id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-600 mb-1.5 tracking-wider">Username</label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-400"></i>
+            <input type="text" id="username" required class="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition shadow-xs" placeholder="Username">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-600 mb-1.5 tracking-wider">Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-400"></i>
+            <input type="password" id="password" required class="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition shadow-xs" placeholder="••••••••">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-sm shadow-lg shadow-indigo-500/30 transition duration-150 flex items-center justify-center gap-2 cursor-pointer">
+          Masuk Dashboard <i class="fa-solid fa-right-to-bracket text-xs"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== LAYOUT DASBOARD UTAMA ==================== -->
+  <div id="mainDashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+    
+    <!-- SIDEBAR KIRI -->
+    <aside class="w-full md:w-64 bg-slate-900 text-slate-400 flex flex-col justify-between shadow-2xl md:fixed md:h-screen z-30">
+      <div>
+        <div class="p-5 flex items-center gap-3 border-b border-slate-800 bg-slate-950/40">
+          <!-- Logo Dashboard Bulat Elegan -->
+          <div class="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <img src="https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg" 
+                 alt="Logo Dashboard" 
+                 class="w-full h-full object-cover" 
+                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=120&auto=format&fit=crop&q=60';">
+          </div>
+          <div>
+            <span id="sidebarAppTitle" class="text-white font-extrabold tracking-wider text-sm block">DAPODIK V2</span>
+            <span id="sidebarAppSubtitle" class="text-[10px] text-slate-500 font-semibold uppercase tracking-widest">Sistem Mandiri</span>
+          </div>
+        </div>
+        
+        <nav class="p-3 space-y-1">
+          <button onclick="changeSection('dashboard')" id="menu-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+            <i class="fa-solid fa-chart-line w-5 text-center"></i> Dashboard Beranda
+          </button>
+          
+          <div class="pt-5 pb-1.5 px-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase">Katalog Data</div>
+          
+          <!-- MENU DROPDOWN: PESERTA DIDIK -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('submenu-peserta-didik', 'chevron-peserta-didik')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer text-slate-400">
+              <span class="flex items-center gap-3">
+                <i class="fa-solid fa-users w-5 text-center"></i> Peserta Didik
+              </span>
+              <i id="chevron-peserta-didik" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+            </button>
+            
+            <div id="submenu-peserta-didik" class="hidden pl-4 space-y-1 mt-1 transition-all duration-300">
+              <button onclick="fetchTableData('Data Siswa')" id="menu-siswa" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition text-left font-semibold text-xs hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                <i class="fa-solid fa-user-graduate w-4 text-center"></i> Data Siswa
+              </button>
+              <button onclick="fetchTableData('Data Siswa Keluar')" id="menu-siswakeluar" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition text-left font-semibold text-xs hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                <i class="fa-solid fa-user-slash w-4 text-center"></i> Data Siswa Keluar
+              </button>
+            </div>
+          </div>
+
+          <!-- MENU DROPDOWN: GTK -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('submenu-gtk', 'chevron-gtk')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer text-slate-400">
+              <span class="flex items-center gap-3">
+                <i class="fa-solid fa-chalkboard-user w-5 text-center"></i> GTK
+              </span>
+              <i id="chevron-gtk" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+            </button>
+            
+            <div id="submenu-gtk" class="hidden pl-4 space-y-1 mt-1 transition-all duration-300">
+              <button onclick="fetchTableData('Data Guru')" id="menu-guru" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition text-left font-semibold text-xs hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                <i class="fa-solid fa-person-chalkboard w-4 text-center"></i> Data Guru
+              </button>
+              <button onclick="fetchTableData('Data Tendik')" id="menu-tendik" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition text-left font-semibold text-xs hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                <i class="fa-solid fa-user-tie w-4 text-center"></i> Data Tendik
+              </button>
+            </div>
+          </div>
+
+          <!-- Admin Panel -->
+          <div id="adminPanelHeader" class="pt-5 pb-1.5 px-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase hidden">Admin Panel</div>
+          
+          <button onclick="fetchSettingsInfo()" id="menu-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer hidden">
+            <i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan DB
+          </button>
+        </nav>
+      </div>
+      
+      <div class="p-4 border-t border-slate-800 bg-slate-950/20 flex flex-col gap-3">
+        <div class="flex items-center gap-3 px-1">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-extrabold text-xs flex items-center justify-center shadow-md shadow-indigo-500/20" id="userInitial">A</div>
+          <div class="truncate">
+            <p class="text-xs font-bold text-white truncate" id="adminName">Administrator</p>
+            <p class="text-[10px] text-emerald-400 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> Online</p>
+          </div>
+        </div>
+        <button onclick="triggerLogout()" class="w-full py-2.5 bg-slate-800 hover:bg-rose-900/30 hover:text-rose-400 text-slate-400 font-bold rounded-xl transition flex items-center justify-center gap-2 text-xs border border-slate-800 cursor-pointer">
+          <i class="fa-solid fa-power-off text-[10px]"></i> Log Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- KONTEN AREA UTAMA -->
+    <main class="flex-1 md:pl-64 min-h-screen flex flex-col min-w-0 overflow-hidden">
+      <!-- TOPBAR -->
+      <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 h-16 flex items-center justify-between px-8 sticky top-0 z-20 shadow-xs">
+        <h1 id="viewTitle" class="text-base font-bold text-slate-800 tracking-tight">Dashboard Utama</h1>
+        
+        <!-- STATUS KONEKSI BADGE (SANGAT FUNGSIONAL UNTUK GITHUB / VERCEL) -->
+        <div class="flex items-center gap-3">
+          <div id="connectionStatusBadge" class="px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border">
+            <!-- Diatur dinamis oleh JavaScript -->
+          </div>
+          <div id="loader" class="hidden flex items-center gap-2 text-indigo-600 text-xs font-bold bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100">
+            <i class="fa-solid fa-circle-notch animate-spin text-sm"></i> Syncing...
+          </div>
+        </div>
+      </header>
+
+      <!-- SEKSI ISI HALAMAN -->
+      <div class="p-6 md:p-8 flex-1">
+        
+        <!-- SECTION 1: BERANDA / DASHBOARD -->
+        <section id="panel-dashboard" class="content-panel fade-in">
+          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 flex justify-between items-center relative overflow-hidden">
+            <div class="z-10">
+              <h2 class="text-xl md:text-2xl font-extrabold" id="greetingUser">Selamat Datang, Administrator!</h2>
+              <p class="text-indigo-100 text-xs md:text-sm mt-1.5 max-w-lg">Semua database terhubung langsung secara real-time. Anda bisa menambah, mengubah, dan memantau siswa, guru, serta tenaga kependidikan dari satu portal terpadu.</p>
+            </div>
+            <i class="fa-solid fa-cubes text-8xl text-white/5 absolute right-6 -bottom-4 transform rotate-12 pointer-events-none"></i>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs flex items-center gap-5 hover:border-indigo-500/40 transition duration-150 group">
+              <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-2xl shadow-xs group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-200">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+              <div>
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Total Siswa Aktif</p>
+                <h3 class="text-3xl font-extrabold mt-0.5 text-slate-800" id="count-siswa">0</h3>
+              </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs flex items-center gap-5 hover:border-emerald-500/40 transition duration-150 group">
+              <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-200">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </div>
+              <div>
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Total Guru / Pendidik</p>
+                <h3 class="text-3xl font-extrabold mt-0.5 text-slate-800" id="count-guru">0</h3>
+              </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs flex items-center gap-5 hover:border-amber-500/40 transition duration-150 group">
+              <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-xs group-hover:bg-amber-600 group-hover:text-white transition-colors duration-200">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <div>
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Total Staf / Tendik</p>
+                <h3 class="text-3xl font-extrabold mt-0.5 text-slate-800" id="count-tendik">0</h3>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: DATA SEKOLAH -->
+        <section id="panel-crud" class="content-panel hidden fade-in w-full max-w-full overflow-hidden">
+          <div class="bg-white border border-slate-200 rounded-3xl shadow-md overflow-hidden flex flex-col w-full">
+            
+            <!-- PANEL KONTROL HEADER TABEL (Tambah, Limit, Sum/Total, Refresh, Download Excel) -->
+            <div class="p-5 border-b border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-50/50 w-full">
+              <div class="flex flex-wrap gap-3 items-center w-full lg:w-auto">
+                <!-- Kolom Pencarian -->
+                <div class="relative max-w-xs w-full">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                  <input type="text" id="searchInput" oninput="filterTableData()" class="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white" placeholder="Cari data dihalaman ini...">
+                </div>
+
+                <!-- Dropdown Limit Tampilkan -->
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-500 text-[11px] font-bold uppercase tracking-wider">Tampilkan:</span>
+                  <select id="limitSelect" onchange="changeLimit(this.value)" class="px-3 py-2 border border-slate-200 rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-xs font-bold text-slate-700 cursor-pointer shadow-2xs">
+                    <option value="10" selected>10 Baris</option>
+                    <option value="50">50 Baris</option>
+                    <option value="all">Semua</option>
+                  </select>
+                </div>
+
+                <!-- Badge Sum/Total Data Aktif -->
+                <div class="px-4 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold rounded-2xl flex items-center gap-1.5 shadow-2xs">
+                  <i class="fa-solid fa-calculator text-indigo-500"></i>
+                  <span>Total: <span id="totalRecords" class="text-indigo-900 font-extrabold text-sm">0</span> Data</span>
+                </div>
+                
+                <!-- Tombol Refresh Live Data -->
+                <button onclick="fetchTableData(activeSheet)" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold rounded-2xl flex items-center justify-center gap-2 transition duration-150 cursor-pointer shadow-2xs">
+                  <i class="fa-solid fa-arrows-rotate text-sm text-indigo-600"></i> Refresh Data
+                </button>
+              </div>
+
+              <div class="flex flex-wrap gap-2.5">
+                <!-- Tombol Download Excel -->
+                <button onclick="downloadExcelData()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-2xl shadow-md shadow-emerald-500/10 flex items-center gap-2 transition duration-150 cursor-pointer">
+                  <i class="fa-solid fa-file-excel text-sm"></i> Download Excel
+                </button>
+                
+                <!-- Tombol Tambah Record -->
+                <button id="addRecordBtn" onclick="triggerOpenModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-2xl shadow-md shadow-indigo-500/10 flex items-center gap-2 transition duration-150 cursor-pointer">
+                  <i class="fa-solid fa-plus text-xs"></i> Tambah Record Baru
+                </button>
+              </div>
+            </div>
+
+            <!-- Petunjuk UI Horizontal Scroll -->
+            <div class="px-5 py-2.5 bg-slate-100 text-slate-500 text-[11px] font-semibold border-b border-slate-200 flex items-center gap-2 w-full">
+              <i class="fa-solid fa-arrows-left-right text-indigo-600 animate-pulse"></i>
+              <span><strong>Navigasi Aktif:</strong> Gunakan trackpad, scroll mouse, atau geser bilah ungu tebal di bawah tabel untuk melihat data kolom kanan (Halaman depan dibatasi kolom A sampai H).</span>
+            </div>
+
+            <!-- KONTINER SCROLLBAR & TABEL -->
+            <div class="table-section-container">
+              <div class="table-container w-full max-w-full block">
+                <table class="w-full text-left border-collapse" id="dataTable">
+                  <thead>
+                    <tr class="bg-slate-900 text-white text-xs font-bold uppercase tracking-wider border-b border-slate-800">
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-xs text-slate-600 bg-white">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 3: PENGATURAN DATABASE (Khusus Admin) -->
+        <section id="panel-settings" class="content-panel hidden fade-in w-full max-w-full overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- PANEL KONEKSI CLOUD (UNTUK DEPLOY KE GITHUB / VERCEL) -->
+            <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8 space-y-6">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-cloud text-indigo-600"></i> Integrasi Vercel / GitHub
+                </h3>
+                <p class="text-slate-400 text-xs mt-1 leading-relaxed">
+                  Gunakan panel ini jika Anda meng-host aplikasi di luar Google (seperti GitHub Pages atau Vercel). Masukkan URL Web App Google Apps Script Anda agar web dapat berkomunikasi dengan database Google Sheets Anda.
+                </p>
+              </div>
+
+              <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                <div class="space-y-1.5">
+                  <label class="block text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">URL Google Apps Script Web App</label>
+                  <input type="text" id="cloudAppScriptUrl" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="https://script.google.com/macros/s/.../exec">
+                </div>
+
+                <div class="flex gap-2.5">
+                  <button onclick="saveCloudSettings()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer">
+                    Simpan & Hubungkan
+                  </button>
+                  <button onclick="resetToLocalMode()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer">
+                    Gunakan Mode Demo
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-xs text-slate-500 leading-relaxed bg-indigo-50/50 p-4 border border-indigo-100 rounded-2xl">
+                <span class="font-bold text-indigo-950 block mb-1">💡 Tips Penting:</span>
+                Pastikan Anda telah melakukan <span class="font-bold">Deploy</span> di Google Apps Script dengan pengaturan akses <span class="font-bold">Anyone (Siapa Saja)</span>, kemudian salin URL berakhiran <code class="bg-indigo-100 px-1 py-0.5 rounded text-indigo-700">/exec</code> ke kolom di atas.
+              </div>
+            </div>
+
+            <!-- PANEL BRANDING IDENTITAS APLIKASI -->
+            <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8">
+              <h3 class="text-base font-bold text-slate-900">Kustomisasi Branding Aplikasi</h3>
+              <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">Ubah teks branding dan identitas aplikasi untuk Halaman Login dan Sidebar secara dinamis sesuai kebutuhan sekolah Anda.</p>
+              
+              <form onsubmit="saveBrandingSettings(event)" class="space-y-4">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Judul Login (Default: DAPODIK DIGITAL)</label>
+                  <input type="text" id="brandLoginTitle" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: DAPODIK DIGITAL">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Sub-judul Login</label>
+                  <input type="text" id="brandLoginSubtitle" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Sistem Informasi Manajemen Sekolah Ringkas & Modern">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Judul Sidebar (Default: DAPODIK V2)</label>
+                  <input type="text" id="brandSidebarTitle" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: DAPODIK V2">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Sub-judul Sidebar</label>
+                  <input type="text" id="brandSidebarSubtitle" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Sistem Mandiri">
+                </div>
+                
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xs shadow-md shadow-indigo-500/10 cursor-pointer transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i> Simpan & Terapkan Branding
+                </button>
+              </form>
+            </div>
+
+            <!-- PANEL KONEKSI ID SPREADSHEET -->
+            <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8 lg:col-span-2">
+              <h3 class="text-base font-bold text-slate-900">Pengaturan Pemindahan ID Spreadsheet</h3>
+              <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">Secara bawaan sistem memakai file spreadsheet tempat script ini berada. Anda dapat mengganti target penyimpanan data ke spreadsheet lain secara instan dengan memasukkan ID-nya di bawah ini.</p>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="settingsWrapper">
+                <!-- Diisi otomatis oleh JavaScript -->
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL FORM INPUT & EDIT DATA -->
+  <div id="formModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <h3 id="modalHeaderTitle" class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Formulir Data</h3>
+        <button onclick="triggerCloseModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+      <form id="modalDataForm" onsubmit="submitFormData(event)" class="p-6 space-y-4 max-h-[60vh] overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+      </form>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2.5">
+        <button onclick="triggerCloseModal()" type="button" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+        <button type="submit" form="modalDataForm" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-500/10 cursor-pointer">Simpan Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PILIHAN AKSI HAPUS KHUSUS DATA SISWA -->
+  <div id="deleteChoiceModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Pilih Aksi Hapus Siswa</h3>
+        <button onclick="closeDeleteChoiceModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+      <div class="p-6">
+        <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+          Anda sedang menghapus data siswa bernama <strong id="deleteSiswaName" class="text-slate-950 font-extrabold">Nama Siswa</strong>. Silakan pilih jenis tindakan yang ingin dijalankan:
+        </p>
+        <div class="space-y-3">
+          <!-- Tombol Pilihan 1: Pindahkan ke Siswa Keluar -->
+          <button onclick="executeDeleteSiswa('keluar')" class="w-full py-3.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-2xl text-xs transition flex items-center justify-between border border-indigo-200/50 text-left">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-user-slash text-base"></i>
+              <span>Pindahkan ke "Data Siswa Keluar" (Hapus Keluar)</span>
+            </span>
+            <span class="fa-solid fa-chevron-right text-[10px]"></span>
+          </button>
+          <!-- Tombol Pilihan 2: Hapus Permanen -->
+          <button onclick="executeDeleteSiswa('permanen')" class="w-full py-3.5 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-2xl text-xs transition flex items-center justify-between border border-rose-200/50 text-left">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-trash-can text-base"></i>
+              <span>Hapus Permanen dari Basis Data</span>
+            </span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeDeleteChoiceModal()" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT PROGRAM ENGINE -->
+  <script>
+    let activeSheet = '';
+    let activeHeaders = [];
+    let cachedRowsData = [];
+    let selectedRowIndex = null;
+    let isSimulationMode = false;
+    let rowsLimit = 10; // Jumlah baris tampilan standar default
+    let currentUser = null; // Status login pengguna aktif
+    let pendingDeleteRowNum = null; // Penampung baris siswa yang akan didelete
+
+    // Data Simulasi (Diselaraskan persis dengan format kolom di gambar: Nama, Kelas, NIS, J/P)
+    let mockData = {
+      default: [
+        { UID: "ADM01", Username: "admin", Password: "admin123", Role: "Admin", Nama: "Administrator Utama", Email: "admin@dapodik.id", Status: "Aktif" },
+        { UID: "USR01", Username: "user", Password: "user123", Role: "User", Nama: "Staf Operator", Email: "staf@dapodik.id", Status: "Aktif" }
+      ],
+      "data siswa": [
+        { _rowNum: 2, NIS: "12345678", Nama: "Budi Santoso", Kelas: "XII-A IPA", "J/P": "L", Alamat: "Jl. Merdeka No. 10", "No HP": "08123456789", "Status Keaktifan": "Aktif" },
+        { _rowNum: 3, NIS: "87654321", Nama: "Siti Rahmawati", Kelas: "XI-B IPS", "J/P": "P", Alamat: "Jl. Mawar Gg. 3", "No HP": "08765432109", "Status Keaktifan": "Aktif" },
+        { _rowNum: 4, NIS: "11223344", Nama: "Fahmi Ramadhan", Kelas: "X-A IPA", "J/P": "L", Alamat: "Jl. Diponegoro No. 45", "No HP": "0852445566", "Status Keaktifan": "Aktif" }
+      ],
+      "data siswa keluar": [
+        { _rowNum: 2, NIS: "55667788", Nama: "Andi Wijaya", Kelas: "XII-B IPA", "J/P": "L", Alamat: "Jl. Sudirman No. 12", "No HP": "08987654321", "Status Keaktifan": "Keluar" }
+      ],
+      "data guru": [
+        { _rowNum: 2, NUPTK: "9876543210", Nama: "Hendra Wijaya, S.Pd", "Mata Pelajaran": "Matematika", "L/P": "L", Email: "hendra@sekolah.sch.id", "No HP": "0811223344", "Status Kepegawaian": "PNS", NIP: "198412032009031002", "Pendidikan Terakhir": "S1 Pendidikan Matematika", "TMT Kerja": "01 Maret 2009", "Status Tugas": "Aktif Mengajar" }
+      ],
+      "data tendik": [
+        { _rowNum: 2, NIP: "19880415201101", Nama: "Ahmad Subarjo", Jabatan: "Kepala Tata Usaha", "L/P": "L", Email: "ahmad.tu@sekolah.sch.id", "No HP": "0822114433", Bagian: "Administrasi Utama", Pendidikan: "D3 Administration", "Status Pegawai": "PNS", "Alamat Tinggal": "Jl. Melati No. 4", "Status Kerja": "Aktif" }
+      ]
+    };
+
+    let mockSettings = {
+      default: { id: "1TjeG_g19AbUblLrhWjWBElG0A0itHm4u7cdjtB5Igvg", name: "Dapodik_DB_Utama" },
+      siswa: { id: "1imvbd-eNGRWZo5ZY0LrwTcgSK71J7OcgF6-oS_JjIIw", name: "Dapodik_Siswa" },
+      guru: { id: "1QGyL7OnHAQZErXxI9VbwzQ5qoDdDoSdfloTMLEWduZo", name: "Dapodik_Guru" },
+      tendik: { id: "1T3vOFNjtOXMTuntoD7TylJ6VDB9IQaNAi4o5Omh5cs8", name: "Dapodik_Tendik" }
+    };
+
+    window.onload = function() {
+      // Deteksi jenis koneksi aktif
+      updateConnectionBadge();
+      applyBranding();
+    };
+
+    // MEMUTAKHIRKAN BADGE KONEKSI DI TOPBAR
+    function updateConnectionBadge() {
+      const badge = document.getElementById('connectionStatusBadge');
+      const cloudUrl = localStorage.getItem('dapodik_cloud_url');
+      
+      if (typeof google !== 'undefined' && typeof google.script !== 'undefined') {
+        isSimulationMode = false;
+        badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-blue-50 border-blue-200 text-blue-700";
+        badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span> Mode: Google Sheets (Bawaan)`;
+        document.getElementById('demoNotice').classList.add('hidden');
+      } else if (cloudUrl) {
+        isSimulationMode = false;
+        badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-indigo-50 border-indigo-200 text-indigo-700";
+        badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span> Mode: Cloud API (Vercel/GitHub)`;
+        document.getElementById('demoNotice').classList.add('hidden');
+        document.getElementById('cloudAppScriptUrl').value = cloudUrl;
+      } else {
+        isSimulationMode = true;
+        badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-amber-50 border-amber-200 text-amber-700";
+        badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-500"></span> Mode: Demo Lokal (Offline)`;
+        document.getElementById('demoNotice').classList.remove('hidden');
+      }
+    }
+
+    function loaderState(show) {
+      document.getElementById('loader').classList.toggle('hidden', !show);
+    }
+
+    // ROUTER UTAMA: SANGAT TANGGUH MENDUKUNG CORS-CROSSTALK (Vercel / GitHub Pages)
+    function callAppsScript(funcName, params = []) {
+      loaderState(true);
+      const cloudUrl = localStorage.getItem('dapodik_cloud_url');
+
+      return new Promise((resolve, reject) => {
+        // 1. Jika berjalan langsung di Google Sheets iFrame
+        if (typeof google !== 'undefined' && typeof google.script !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(res => { loaderState(false); resolve(res); })
+            .withFailureHandler(err => { loaderState(false); alert("Error GAS: " + err); reject(err); })
+            [funcName](...params);
+        }
+        // 2. Jika di-host di luar Google (GitHub/Vercel) dan memiliki URL Cloud API
+        else if (cloudUrl) {
+          fetch(cloudUrl, {
+            method: "POST",
+            // SANGAT PENTING: Menggunakan 'text/plain' mencegah preflight OPTIONS request 
+            // sehingga browser tidak memblokir komunikasi CORS ke Google Apps Script.
+            headers: {
+              "Content-Type": "text/plain"
+            },
+            body: JSON.stringify({ action: funcName, args: params })
+          })
+          .then(response => {
+            if (!response.ok) throw new Error("HTTP Status: " + response.status);
+            return response.json();
+          })
+          .then(res => {
+            loaderState(false);
+            resolve(res);
+          })
+          .catch(err => {
+            loaderState(false);
+            console.error("Cloud Error: ", err);
+            alert("Gagal terhubung dengan Cloud. Periksa apakah Apps Script sudah di-deploy ulang sebagai 'Anyone' dan URL-nya benar.");
+            reject(err);
+          });
+        }
+        // 3. Jika tidak ada koneksi cloud, gunakan simulasi offline
+        else {
+          setTimeout(() => { 
+            loaderState(false); 
+            resolve(simulateBackend(funcName, params)); 
+          }, 200);
+        }
+      });
+    }
+
+    // MANAJEMEN KONEKSI CLOUD DARI HALAMAN PENGATURAN
+    function saveCloudSettings() {
+      const urlInput = document.getElementById('cloudAppScriptUrl').value.trim();
+      if (!urlInput) {
+        alert("Harap isi URL Google Apps Script Web App terlebih dahulu!");
+        return;
+      }
+      if (!urlInput.startsWith("https://script.google.com")) {
+        alert("URL tidak valid! Harus diawali dengan https://script.google.com");
+        return;
+      }
+
+      localStorage.setItem('dapodik_cloud_url', urlInput);
+      updateConnectionBadge();
+      alert("Koneksi Cloud API berhasil disimpan! Aplikasi siap digunakan secara terpusat.");
+      
+      // Muat ulang stat untuk memvalidasi
+      changeSection('dashboard');
+    }
+
+    function resetToLocalMode() {
+      localStorage.removeItem('dapodik_cloud_url');
+      document.getElementById('cloudAppScriptUrl').value = '';
+      updateConnectionBadge();
+      alert("Aplikasi dialihkan kembali ke Mode Demo Lokal.");
+      changeSection('dashboard');
+    }
+
+    function simulateBackend(funcName, params) {
+      if (funcName === 'loginUser') {
+        const [u, p] = params;
+        const found = mockData.default.find(user => user.Username === u && user.Password === p);
+        if (found) return { success: true, user: { uid: found.UID, username: found.Username, role: found.Role, nama: found.Nama } };
+        return { success: false, message: "Username/Password salah!" };
+      }
+      if (funcName === 'getDashboardStats') {
+        return { siswa: mockData["data siswa"].length, guru: mockData["data guru"].length, tendik: mockData["data tendik"].length };
+      }
+      if (funcName === 'getActiveSpreadsheetInfo') return mockSettings;
+      if (funcName === 'getSheetData') {
+        const key = params[0].toLowerCase().trim();
+        let headers = key === 'data siswa' || key === 'data siswa keluar' ? ["NIS", "Nama", "Kelas", "J/P", "Alamat", "No HP", "Status Keaktifan"] :
+                      key === 'data guru' ? ["NUPTK", "Nama", "Mata Pelajaran", "L/P", "Email", "No HP", "Status Kepegawaian", "NIP", "Pendidikan Terakhir", "TMT Kerja", "Status Tugas"] :
+                                            ["NIP", "Nama", "Jabatan", "L/P", "Email", "No HP", "Bagian", "Pendidikan", "Status Pegawai", "Alamat Tinggal", "Status Kerja"];
+        return { success: true, headers, data: mockData[key] || [] };
+      }
+      if (funcName === 'addData') {
+        const [sheetName, record] = params;
+        const key = sheetName.toLowerCase().trim();
+        if (!mockData[key]) mockData[key] = [];
+        record._rowNum = mockData[key].length + 2;
+        mockData[key].push(record);
+        return { success: true, message: "Berhasil menambahkan data ke " + sheetName };
+      }
+      if (funcName === 'updateData') {
+        const [sheetName, rowNum, record] = params;
+        const key = sheetName.toLowerCase().trim();
+        if (mockData[key]) {
+          const idx = mockData[key].findIndex(r => r._rowNum === parseInt(rowNum));
+          if (idx !== -1) {
+            mockData[key][idx] = { ...mockData[key][idx], ...record };
+            return { success: true, message: "Berhasil memperbarui data" };
+          }
+        }
+        return { success: false, message: "Gagal menemukan baris data" };
+      }
+      if (funcName === 'deleteData') {
+        const [sheetName, rowNum] = params;
+        const key = sheetName.toLowerCase().trim();
+        if (mockData[key]) {
+          mockData[key] = mockData[key].filter(r => r._rowNum !== parseInt(rowNum));
+          return { success: true, message: "Berhasil menghapus baris data!" };
+        }
+        return { success: false, message: "Baris data tidak ditemukan." };
+      }
+    }
+
+    // Penyelarasan Hak Akses Berdasarkan Role Login
+    function applyRoleAccess() {
+      const settingsBtn = document.getElementById('menu-settings');
+      const settingsDivider = document.getElementById('adminPanelHeader');
+      
+      if (currentUser && currentUser.role === 'Admin') {
+        if (settingsBtn) settingsBtn.classList.remove('hidden');
+        if (settingsDivider) settingsDivider.classList.remove('hidden');
+      } else {
+        if (settingsBtn) settingsBtn.classList.add('hidden');
+        if (settingsDivider) settingsDivider.classList.add('hidden');
+        
+        // Proteksi Halaman: Jika User biasa mencoba membuka Pengaturan DB, redirect ke Dashboard
+        const activePanel = document.querySelector('.content-panel:not(.hidden)');
+        if (activePanel && activePanel.id === 'panel-settings') {
+          changeSection('dashboard');
+        }
+      }
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      const res = await callAppsScript('loginUser', [u, p]);
+      if(res.success) {
+        currentUser = res.user;
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('mainDashboard').classList.remove('hidden');
+        document.getElementById('greetingUser').innerText = `Selamat Datang, ${res.user.nama}!`;
+        document.getElementById('adminName').innerText = res.user.nama;
+        document.getElementById('userInitial').innerText = res.user.nama.charAt(0).toUpperCase();
+        
+        applyRoleAccess();
+        changeSection('dashboard');
+      } else alert(res.message);
+    }
+
+    function triggerLogout() {
+      currentUser = null;
+      document.getElementById('loginForm').reset();
+      document.getElementById('mainDashboard').classList.add('hidden');
+      document.getElementById('loginPage').classList.remove('hidden');
+    }
+
+    // FUNGSI UTAMA: Kontrol Buka/Tutup Submenu Peserta Didik
+    function toggleSubmenu(id, chevronId) {
+      const submenu = document.getElementById(id);
+      const chevron = document.getElementById(chevronId);
+      if (submenu && chevron) {
+        submenu.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-180');
+      }
+    }
+
+    async function changeSection(section) {
+      // Jika seksi yang dipilih adalah settings, pastikan hanya Admin yang diizinkan masuk
+      if (section === 'settings' && (!currentUser || currentUser.role !== 'Admin')) {
+        alert("Akses Ditolak! Hanya administrator yang berhak mengakses pengaturan DB.");
+        return;
+      }
+
+      document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500'));
+      
+      const panel = document.getElementById(`panel-${section}`);
+      if(panel) panel.classList.remove('hidden');
+      
+      const activeBtn = document.getElementById(`menu-${section}`);
+      if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+
+      // Tutup otomatis submenu jika berpindah ke halaman utama Dashboard atau Pengaturan DB
+      const submenuPeserta = document.getElementById('submenu-peserta-didik');
+      const chevronPeserta = document.getElementById('chevron-peserta-didik');
+      if (submenuPeserta && !submenuPeserta.classList.contains('hidden')) {
+        submenuPeserta.classList.add('hidden');
+      }
+      if (chevronPeserta && chevronPeserta.classList.contains('rotate-180')) {
+        chevronPeserta.classList.remove('rotate-180');
+      }
+
+      const submenuGtk = document.getElementById('submenu-gtk');
+      const chevronGtk = document.getElementById('chevron-gtk');
+      if (submenuGtk && !submenuGtk.classList.contains('hidden')) {
+        submenuGtk.classList.add('hidden');
+      }
+      if (chevronGtk && chevronGtk.classList.contains('rotate-180')) {
+        chevronGtk.classList.remove('rotate-180');
+      }
+
+      if (section === 'dashboard') {
+        document.getElementById('viewTitle').innerText = "Dashboard Utama";
+        const stats = await callAppsScript('getDashboardStats');
+        document.getElementById('count-siswa').innerText = stats.siswa;
+        document.getElementById('count-guru').innerText = stats.guru;
+        document.getElementById('count-tendik').innerText = stats.tendik;
+      }
+    }
+
+    async function fetchTableData(sheetName) {
+      activeSheet = sheetName;
+      document.getElementById('viewTitle').innerText = `Data Sekolah > Kelola ${sheetName}`;
+      document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500'));
+
+      document.getElementById('panel-crud').classList.remove('hidden');
+      
+      const menuKey = sheetName.replace('Data ', '').toLowerCase().replace(/\s+/g, '');
+      const activeBtn = document.getElementById(`menu-${menuKey}`);
+      if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      
+      // Sinkronisasi Status Submenu Peserta Didik & GTK secara dinamis
+      const submenuPeserta = document.getElementById('submenu-peserta-didik');
+      const chevronPeserta = document.getElementById('chevron-peserta-didik');
+      const submenuGtk = document.getElementById('submenu-gtk');
+      const chevronGtk = document.getElementById('chevron-gtk');
+
+      if (sheetName === 'Data Siswa' || sheetName === 'Data Siswa Keluar') {
+        if (submenuPeserta && submenuPeserta.classList.contains('hidden')) {
+          submenuPeserta.classList.remove('hidden');
+        }
+        if (chevronPeserta && !chevronPeserta.classList.contains('rotate-180')) {
+          chevronPeserta.classList.add('rotate-180');
+        }
+        // Tutup GTK
+        if (submenuGtk && !submenuGtk.classList.contains('hidden')) {
+          submenuGtk.classList.add('hidden');
+        }
+        if (chevronGtk && chevronGtk.classList.contains('rotate-180')) {
+          chevronGtk.classList.remove('rotate-180');
+        }
+      } else if (sheetName === 'Data Guru' || sheetName === 'Data Tendik') {
+        if (submenuGtk && submenuGtk.classList.contains('hidden')) {
+          submenuGtk.classList.remove('hidden');
+        }
+        if (chevronGtk && !chevronGtk.classList.contains('rotate-180')) {
+          chevronGtk.classList.add('rotate-180');
+        }
+        // Tutup Peserta Didik
+        if (submenuPeserta && !submenuPeserta.classList.contains('hidden')) {
+          submenuPeserta.classList.add('hidden');
+        }
+        if (chevronPeserta && chevronPeserta.classList.contains('rotate-180')) {
+          chevronPeserta.classList.remove('rotate-180');
+        }
+      } else {
+        // Tutup keduanya jika beralih ke sheet lain
+        if (submenuPeserta && !submenuPeserta.classList.contains('hidden')) {
+          submenuPeserta.classList.add('hidden');
+        }
+        if (chevronPeserta && chevronPeserta.classList.contains('rotate-180')) {
+          chevronPeserta.classList.remove('rotate-180');
+        }
+        if (submenuGtk && !submenuGtk.classList.contains('hidden')) {
+          submenuGtk.classList.add('hidden');
+        }
+        if (chevronGtk && chevronGtk.classList.contains('rotate-180')) {
+          chevronGtk.classList.remove('rotate-180');
+        }
+      }
+
+      // Ambil tombol "Tambah Record"
+      const addBtn = document.getElementById('addRecordBtn');
+      if (addBtn) {
+        addBtn.classList.remove('hidden');
+      }
+
+      const res = await callAppsScript('getSheetData', [sheetName]);
+      if(res.success) {
+        activeHeaders = res.headers;
+        cachedRowsData = res.data;
+        drawTableRows(res.headers, res.data);
+      } else alert(res.message);
+    }
+
+    // Fungsi pengubah limit tampilkan data
+    function changeLimit(val) {
+      rowsLimit = val;
+      filterTableData();
+    }
+
+    // ==================== RENDERING DAN DETEKSI LEBAR TABEL UNTUK STICKY ====================
+    function drawTableRows(headers, dataList) {
+      const theadRow = document.querySelector('#dataTable thead tr');
+      const tbody = document.querySelector('#dataTable tbody');
+      
+      // Update label total sum aktual
+      document.getElementById('totalRecords').innerText = dataList.length;
+
+      let sortedHeaders = [...headers];
+      const namaIdx = sortedHeaders.findIndex(h => /nama/i.test(h));
+      if (namaIdx > 0) {
+        const namaHeader = sortedHeaders.splice(namaIdx, 1)[0];
+        sortedHeaders.unshift(namaHeader);
+      }
+      
+      // Ambil hanya 8 kolom pertama (A sampai H) untuk visualisasi halaman depan agar rapi
+      const displayHeaders = sortedHeaders.slice(0, 8);
+      
+      // Potong data berdasarkan limit yang dipilih
+      let displayDataList = [...dataList];
+      if (rowsLimit !== 'all') {
+        displayDataList = displayDataList.slice(0, parseInt(rowsLimit));
+      }
+      
+      let headerHtml = `<th class="px-2 py-3 col-sticky-no text-center text-[11px]" style="width: 45px; min-width: 45px; max-width: 45px; left: 0px !important;">#</th>`;
+      displayHeaders.forEach((h, index) => {
+        let stickyClass = "";
+        let widthStyle = "width: 200px; min-width: 200px; max-width: 200px;"; // Diperlebar agar memicu overflow scrollbar horizontal secara paksa
+        let leftStyle = "";
+        
+        if (index === 0) {
+          stickyClass = "col-sticky-nama";
+          widthStyle = "width: 220px; min-width: 220px; max-width: 220px;";
+          leftStyle = `left: 45px !important;`;
+        }
+        headerHtml += `<th class="px-3 py-3 text-[11px] ${stickyClass}" style="${widthStyle} ${leftStyle}">${h}</th>`;
+      });
+      headerHtml += `<th class="px-3 py-3 text-center text-[11px] bg-slate-900 sticky right-0 z-20" style="width: 110px; min-width: 110px; max-width: 110px; right: 0px !important; box-shadow: -4px 0 8px -3px rgba(0,0,0,0.2);">Aksi</th>`;
+      theadRow.innerHTML = headerHtml;
+
+      let bodyHtml = '';
+      if(!displayDataList || displayDataList.length === 0) {
+        bodyHtml = `<tr><td colspan="${displayHeaders.length + 2}" class="px-6 py-8 text-center text-slate-400">Belum ada data terekam.</td></tr>`;
+      } else {
+        displayDataList.forEach((row, i) => {
+          bodyHtml += `<tr class="hover:bg-slate-50 bg-white">`;
+          bodyHtml += `<td class="px-2 py-3 text-center font-bold text-slate-400 col-sticky-no border-r border-slate-100" style="width: 45px; min-width: 45px; max-width: 45px; left: 0px !important;">${i + 1}</td>`;
+          
+          displayHeaders.forEach((h, index) => {
+            let stickyClass = "";
+            let widthStyle = "width: 200px; min-width: 200px; max-width: 200px;";
+            let leftStyle = "";
+            
+            if (index === 0) {
+              stickyClass = "col-sticky-nama font-bold text-slate-900 border-r border-slate-100";
+              widthStyle = "width: 220px; min-width: 220px; max-width: 220px;";
+              leftStyle = `left: 45px !important;`;
+            }
+            let val = row[h] !== undefined ? row[h] : '-';
+            bodyHtml += `<td class="px-3 py-3 truncate text-[11px] ${stickyClass}" style="${widthStyle} ${leftStyle}" title="${val}">${val}</td>`;
+          });
+          
+          bodyHtml += `<td class="px-3 py-3 text-center space-x-1 border-l border-slate-100 bg-white sticky right-0 z-10 shadow-[-4px_0_8px_-3px_rgba(0,0,0,0.1)]" style="width: 110px; min-width: 110px; max-width: 110px; right: 0px !important;">
+            <button onclick="triggerOpenModal(${row._rowNum})" class="text-indigo-600 hover:bg-indigo-50 p-1 rounded" title="Edit Baris"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deleteRecordData(${row._rowNum})" class="text-rose-500 hover:bg-rose-100 p-1 rounded" title="Hapus Baris"><i class="fa-solid fa-trash-can"></i></button>
+          </td></tr>`;
+        });
+      }
+      tbody.innerHTML = bodyHtml;
+    }
+
+    function filterTableData() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = cachedRowsData.filter(r => activeHeaders.some(h => String(r[h]).toLowerCase().includes(val)));
+      drawTableRows(activeHeaders, filtered);
+    }
+
+    // ==================== EKSPOR EXCEL SEBENARNYA SECARA DINAMIS ====================
+    function downloadExcelData() {
+      if (!cachedRowsData || cachedRowsData.length === 0) {
+        alert("Tidak ada data tabel untuk diekspor!");
+        return;
+      }
+
+      let excelTemplate = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">`;
+      excelTemplate += `<head>
+        <meta charset="UTF-8">
+        <!--[if gte mso 9]>
+        <xml>
+          <x:ExcelWorkbook>
+            <x:ExcelWorksheets>
+              <x:ExcelWorksheet>
+                <x:Name>${activeSheet} - Database</x:Name>
+                <x:WorksheetOptions>
+                  <x:DisplayGridlines/>
+                </x:WorksheetOptions>
+              </x:ExcelWorksheet>
+            </x:ExcelWorksheets>
+          </x:ExcelWorkbook>
+        </xml>
+        <![endif]-->
+        <style>
+          th { background-color: #0f172a; color: #ffffff; font-weight: bold; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 11pt; padding: 6px; }
+          td { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10pt; padding: 4px; }
+        </style>
+      </head>
+      <body>`;
+      excelTemplate += `<table border="1px">`;
+      
+      excelTemplate += `<tr>`;
+      excelTemplate += `<th>No</th>`;
+      activeHeaders.forEach(h => {
+        excelTemplate += `<th>${h}</th>`;
+      });
+      excelTemplate += `</tr>`;
+
+      cachedRowsData.forEach((row, idx) => {
+        excelTemplate += `<tr>`;
+        excelTemplate += `<td>${idx + 1}</td>`;
+        activeHeaders.forEach(h => {
+          const lowerH = h.toLowerCase();
+          let cellStyle = '';
+          if (lowerH.includes('nik') || lowerH.includes('kk') || lowerH.includes('nis') || 
+              lowerH.includes('nuptk') || lowerH.includes('nip') || lowerH.includes('hp') || 
+              lowerH.includes('telp') || lowerH.includes('tanggal') || lowerH.includes('tgl') || 
+              lowerH.includes('tmt') || lowerH.includes('lahir')) {
+            cellStyle = ' style="mso-number-format:\\@;"';
+          }
+          excelTemplate += `<td${cellStyle}>${row[h] !== undefined ? row[h] : ''}</td>`;
+        });
+        excelTemplate += `</tr>`;
+      });
+
+      excelTemplate += `</table></body></html>`;
+
+      const blob = new Blob([excelTemplate], { type: "application/vnd.ms-excel" });
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = `Dapodik_${activeSheet.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.xls`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+
+    // Hanya kolom "Nama" yang wajib diisi (required), field lainnya opsional
+    function triggerOpenModal(rowNum = null) {
+      selectedRowIndex = rowNum;
+      const formEl = document.getElementById('modalDataForm');
+      document.getElementById('modalHeaderTitle').innerText = rowNum ? `Edit Data` : `Tambah Baru`;
+      let inputsHtml = '';
+      const dataObj = rowNum ? cachedRowsData.find(r => r._rowNum === rowNum) : {};
+      
+      activeHeaders.forEach(h => {
+        if (h === 'UID') return;
+        
+        const isRequired = (h.toLowerCase().trim() === 'nama');
+        const requiredAttr = isRequired ? 'required' : '';
+        const requiredAsterisk = isRequired ? '<span class="text-rose-500 font-extrabold ml-1">*</span>' : '';
+        
+        inputsHtml += `<div class="col-span-1">
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">${h}${requiredAsterisk}</label>
+          <input type="text" name="${h}" value="${dataObj[h] || ''}" ${requiredAttr} class="w-full px-3 py-2 border rounded-xl text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+        </div>`;
+      });
+      formEl.innerHTML = inputsHtml;
+      document.getElementById('formModal').classList.remove('hidden');
+    }
+
+    function triggerCloseModal() { document.getElementById('formModal').classList.add('hidden'); }
+
+    // ==================== METODE PENYELARASAN BRANDING DARI LOCALSTORAGE ====================
+    function applyBranding() {
+      const brand = localStorage.getItem('app_brand') || "DAPODIK DIGITAL";
+      const subtitle = localStorage.getItem('app_subtitle') || "Sistem Informasi Manajemen Sekolah Ringkas & Modern";
+      const version = localStorage.getItem('app_version') || "DAPODIK V2";
+      const subversion = localStorage.getItem('app_subversion') || "Sistem Mandiri";
+
+      // Halaman Login
+      document.getElementById('loginAppTitle').innerText = brand;
+      document.getElementById('loginAppSubtitle').innerText = subtitle;
+
+      // Sidebar Kiri
+      const sidebarTitleEl = document.getElementById('sidebarAppTitle');
+      const sidebarSubEl = document.getElementById('sidebarAppSubtitle');
+      if (sidebarTitleEl) sidebarTitleEl.innerText = version;
+      if (sidebarSubEl) sidebarSubEl.innerText = subversion;
+
+      const brandInput = document.getElementById('brandLoginTitle');
+      const subtitleInput = document.getElementById('brandLoginSubtitle');
+      const sidebarInput = document.getElementById('brandSidebarTitle');
+      const subSidebarInput = document.getElementById('brandSidebarSubtitle');
+
+      if (brandInput) brandInput.value = brand;
+      if (subtitleInput) subtitleInput.value = subtitle;
+      if (sidebarInput) sidebarInput.value = version;
+      if (subSidebarInput) subSidebarInput.value = subversion;
+    }
+
+    // Simpan Pengaturan Branding Baru
+    function saveBrandingSettings(e) {
+      e.preventDefault();
+      const bTitle = document.getElementById('brandLoginTitle').value.trim();
+      const bSub = document.getElementById('brandLoginSubtitle').value.trim();
+      const sTitle = document.getElementById('brandSidebarTitle').value.trim();
+      const sSub = document.getElementById('brandSidebarSubtitle').value.trim();
+
+      if(!bTitle || !sTitle) {
+        alert("Judul tidak boleh kosong!");
+        return;
+      }
+
+      localStorage.setItem('app_brand', bTitle);
+      localStorage.setItem('app_subtitle', bSub);
+      localStorage.setItem('app_version', sTitle);
+      localStorage.setItem('app_subversion', sSub);
+
+      applyBranding();
+      alert("Branding Aplikasi Berhasil Diperbarui!");
+    }
+
+    // ==================== MEMUAT PENGATURAN DATABASE (DENGAN TAMPILAN URL SPREADSHEET) ====================
+    async function fetchSettingsInfo() {
+      document.getElementById('viewTitle').innerText = "Sistem > Konfigurasi ID Database";
+      
+      document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500'));
+
+      document.getElementById('panel-settings').classList.remove('hidden');
+      const activeBtn = document.getElementById('menu-settings');
+      if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+
+      const info = await callAppsScript('getActiveSpreadsheetInfo');
+      const box = document.getElementById('settingsWrapper');
+      
+      let listHtml = '';
+      const aliases = { 
+        default: "ID DB Pengguna (Tabel Users)", 
+        siswa: "ID DB Khusus Siswa (Tabel Data Siswa / Data Siswa Keluar)", 
+        guru: "ID DB Khusus Guru (Tabel Data Guru)", 
+        tendik: "ID DB Khusus Tendik (Tabel Data Tendik)" 
+      };
+      
+      for (let key in info) {
+        const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${info[key].id}/edit`;
+        
+        listHtml += `<div class="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 shadow-2xs hover:border-indigo-500/10 transition">
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">${aliases[key]}</label>
+            <a href="${spreadsheetUrl}" target="_blank" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200/50">
+              <i class="fa-solid fa-file-export"></i> Buka Google Sheets
+            </a>
+          </div>
+          <div class="text-xs font-bold text-indigo-600 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-file-excel"></i> File Aktif: ${info[key].name}</div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="input-id-${key}" value="${info[key].id}" class="flex-1 px-3 py-2.5 text-xs border border-slate-200 bg-white rounded-xl focus:outline-none focus:border-slate-400 text-slate-700">
+            <button onclick="saveNewDbId('${key}')" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-950 text-white text-xs font-bold rounded-xl transition cursor-pointer whitespace-nowrap">Hubungkan & Setup</button>
+          </div>
+        </div>`;
+      }
+      box.innerHTML = listHtml;
+    }
+
+    // Memperbarui dan Menyinkronkan ID Database Baru
+    async function saveNewDbId(key) {
+      const val = document.getElementById(`input-id-${key}`).value.trim();
+      if(!val) return alert("ID Spreadsheet tidak boleh dikosongkan!");
+      const res = await callAppsScript('updateSpreadsheetId', [val, key]);
+      alert(res.message);
+      fetchSettingsInfo();
+    }
+
+    // ==================== INTERAKSI PILIHAN HAPUS DATA SISWA ====================
+    async function deleteRecordData(rowNum) {
+      const rowData = cachedRowsData.find(r => r._rowNum === rowNum);
+      if (!rowData) return;
+
+      if (activeSheet === 'Data Siswa') {
+        pendingDeleteRowNum = rowNum;
+        document.getElementById('deleteSiswaName').innerText = rowData.Nama || 'Siswa';
+        document.getElementById('deleteChoiceModal').classList.remove('hidden');
+      } else {
+        const confirmMsg = `Apakah Anda yakin ingin menghapus data ini secara permanen dari Google Spreadsheet?\n(Tindakan ini tidak dapat dibatalkan!)`;
+        if (confirm(confirmMsg)) {
+          await executeDirectDelete(activeSheet, rowNum);
+        }
+      }
+    }
+
+    function closeDeleteChoiceModal() {
+      document.getElementById('deleteChoiceModal').classList.add('hidden');
+      pendingDeleteRowNum = null;
+    }
+
+    // Eksekusi pilihan hapus siswa
+    async function executeDeleteSiswa(tipe) {
+      if (!pendingDeleteRowNum) return;
+      const rowNum = pendingDeleteRowNum;
+      const rowData = cachedRowsData.find(r => r._rowNum === rowNum);
+      closeDeleteChoiceModal();
+
+      if (!rowData) return;
+
+      try {
+        if (tipe === 'keluar') {
+          const recordToMove = { ...rowData };
+          delete recordToMove._rowNum;
+          recordToMove["Status Keaktifan"] = "Keluar";
+          
+          const moveRes = await callAppsScript('addData', ['Data Siswa Keluar', recordToMove]);
+          if (!moveRes.success) {
+            alert("Gagal memindahkan data ke Data Siswa Keluar: " + moveRes.message);
+            return;
+          }
+        }
+
+        const res = await callAppsScript('deleteData', [activeSheet, rowNum]);
+        if (res.success) {
+          if (tipe === 'keluar') {
+            alert(`Berhasil memindahkan "${rowData.Nama}" ke daftar Data Siswa Keluar!`);
+          } else {
+            alert("Siswa berhasil dihapus secara permanen dari database!");
+          }
+          await fetchTableData(activeSheet);
+        } else {
+          alert("Gagal menghapus data dari daftar aktif: " + res.message);
+        }
+      } catch (error) {
+        alert("Terjadi kesalahan sistem saat menghubungi cloud server.");
+      }
+    }
+
+    // Eksekusi penghapusan langsung untuk Guru, Tendik, dan Siswa Keluar
+    async function executeDirectDelete(sheetName, rowNum) {
+      try {
+        const res = await callAppsScript('deleteData', [sheetName, rowNum]);
+        if (res.success) {
+          alert("Data berhasil dihapus!");
+          await fetchTableData(sheetName);
+        } else {
+          alert("Gagal menghapus data: " + res.message);
+        }
+      } catch (error) {
+        alert("Terjadi kesalahan sistem saat menghubungi cloud server.");
+      }
+    }
+
+    // Fungsi Submit Form Data (Dinamis Tambah/Ubah)
+    async function submitFormData(e) {
+      e.preventDefault();
+      const formData = new FormData(document.getElementById('modalDataForm'));
+      const payload = {};
+      formData.forEach((val, key) => payload[key] = val);
+      
+      try {
+        let res;
+        if (selectedRowIndex) {
+          res = await callAppsScript('updateData', [activeSheet, selectedRowIndex, payload]);
+        } else {
+          res = await callAppsScript('addData', [activeSheet, payload]);
+        }
+        
+        if (res.success) {
+          triggerCloseModal();
+          await fetchTableData(activeSheet);
+        } else {
+          alert("Gagal menyimpan data: " + res.message);
+        }
+      } catch (err) {
+        alert("Gagal menghubungi server untuk penyimpanan.");
+      }
+    }
+  </script>
+</body>
+</html>
