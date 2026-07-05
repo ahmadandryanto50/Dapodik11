@@ -320,7 +320,7 @@
         
         <!-- SECTION 1: BERANDA / DASHBOARD -->
         <section id="panel-dashboard" class="content-panel fade-in space-y-8">
-          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 flex justify-between items-center relative overflow-hidden">
+          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl flex justify-between items-center relative overflow-hidden">
             <div class="z-10">
               <h2 class="text-xl md:text-2xl font-extrabold" id="greetingUser">Selamat Datang, Administrator!</h2>
               <p class="text-indigo-100 text-xs md:text-sm mt-1.5 max-w-lg">Semua database terhubung langsung secara real-time. Anda bisa menambah, mengubah, dan memantau siswa, guru, serta tenaga kependidikan dari satu portal terpadu.</p>
@@ -438,6 +438,21 @@
               </div>
 
             </div>
+
+            <!-- RINCIAN UTAMA: TABEL JUMLAH SISWA DAN SEBARAN GENDER PER KELAS SECARA DETAIL (RINCIAN KEKINIAN) -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs">
+              <div class="border-b border-slate-100 pb-3 mb-4 flex justify-between items-center">
+                <div>
+                  <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider mb-1">Analisis Rombongan Belajar (Rombel)</h4>
+                  <p class="text-sm font-bold text-slate-800">Daftar Kapasitas &amp; Sebaran Gender Per Kelas</p>
+                </div>
+                <span class="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-extrabold rounded-xl" id="totalClassesBadge">0 Rombel Terdeteksi</span>
+              </div>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="classBreakdownList">
+                <!-- Diisi secara dinamis menggunakan Javascript -->
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -571,7 +586,7 @@
                   <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Sub-judul Sidebar</label>
                   <input type="text" id="brandSidebarSubtitle" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Sistem Mandiri">
                 </div>
-                <!-- BARU: PENGATURAN LOGO LOGIN & SIDEBAR -->
+                <!-- PENGATURAN LOGO LOGIN & SIDEBAR -->
                 <div>
                   <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">URL Logo Login Sekolah</label>
                   <input type="text" id="brandLoginLogo" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="https://contoh.com/logo-login.png">
@@ -647,7 +662,7 @@
     </div>
   </div>
 
-  <!-- MODAL FORM INPUT & EDIT DATA (PEMBUNGKUS UTAMA DISESUAIKAN MENJADI FORM BERPADU) -->
+  <!-- MODAL FORM INPUT & EDIT DATA -->
   <div id="formModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
     <form id="modalDataForm" onsubmit="submitFormData(event)" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
       <!-- Bagian Atas / Header Modal -->
@@ -658,7 +673,7 @@
         </button>
       </div>
       
-      <!-- Wadah Khusus untuk Dinamis Input Elemen (Mencegah Kehilangan Komponen Submit/Batal) -->
+      <!-- Wadah Khusus untuk Dinamis Input Elemen -->
       <div id="modalFormFields" class="p-6 space-y-4 max-h-[50vh] overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Input akan diinjeksi di sini -->
       </div>
@@ -672,8 +687,8 @@
   </div>
 
   <!-- MODAL PILIHAN AKSI HAPUS KHUSUS DATA SISWA -->
-  <div id="deleteChoiceModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
+  <div id="deleteChoiceModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col">
       <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Pilih Aksi Hapus Siswa</h3>
         <button onclick="closeDeleteChoiceModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
@@ -1050,24 +1065,83 @@
       document.getElementById('label-agama-islam').innerText = islamCount;
       document.getElementById('label-agama-kristen').innerText = kristenCount;
 
-      // 3. Perhitungan Siswa & Sebaran Gender Per Kelas / Rombel
-      let classStructure = {}; // Struktur: { "XII-A IPA": { l: 0, p: 0, total: 0 } }
+      // 3. Perhitungan Siswa & Sebaran Gender Serta Agama Per Kelas / Rombel
+      let classStructure = {}; // Struktur: { "XII-A IPA": { l: 0, p: 0, total: 0, islam: 0, kristen: 0 } }
       siswaData.forEach(row => {
         const kelas = String(row['Kelas'] || 'Tanpa Kelas').trim();
         const gen = String(row['J/P'] || '').toUpperCase().trim();
+        const agama = String(row['Agama'] || '').toUpperCase().trim();
         
         if (!classStructure[kelas]) {
-          classStructure[kelas] = { l: 0, p: 0, total: 0 };
+          classStructure[kelas] = { l: 0, p: 0, total: 0, islam: 0, kristen: 0 };
         }
         classStructure[kelas].total++;
+        
+        // Sebaran Gender
         if (gen === 'L' || gen === 'LAKI-LAKI' || gen === 'LAKI - LAKI') classStructure[kelas].l++;
         else if (gen === 'P' || gen === 'PEREMPUAN') classStructure[kelas].p++;
+
+        // Sebaran Agama
+        if (agama.includes('ISLAM')) classStructure[kelas].islam++;
+        else if (agama.includes('KRISTEN') || agama.includes('PROTESTAN') || agama.includes('KATOLIK')) classStructure[kelas].kristen++;
       });
 
       const classesLabels = Object.keys(classStructure);
       const classTotals = classesLabels.map(k => classStructure[k].total);
       const classLaki = classesLabels.map(k => classStructure[k].l);
       const classPr = classesLabels.map(k => classStructure[k].p);
+
+      // SINKRONISASI BARU: Tampilkan Tabel Rincian Breakdown Angka Kelas secara Elegan
+      const totalClassesBadge = document.getElementById('totalClassesBadge');
+      if (totalClassesBadge) {
+        totalClassesBadge.innerText = `${classesLabels.length} Rombel Terdeteksi`;
+      }
+
+      const breakdownContainer = document.getElementById('classBreakdownList');
+      if (breakdownContainer) {
+        let listHtml = '';
+        if (classesLabels.length === 0) {
+          listHtml = `<div class="col-span-full py-6 text-center text-xs font-bold text-slate-400"><i class="fa-solid fa-folder-open mb-1.5 text-base block"></i> Belum ada data rombel kelas kependidikan terdeteksi.</div>`;
+        } else {
+          // Lakukan pengurutan kelas agar terstruktur alfabetis saat dirender
+          classesLabels.sort().forEach(k => {
+            const item = classStructure[k];
+            listHtml += `
+              <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:border-indigo-500/20 hover:bg-indigo-50/10 transition duration-150 flex flex-col justify-between">
+                <div>
+                  <span class="text-[9px] uppercase font-extrabold tracking-wider text-slate-400">Kelas / Rombel</span>
+                  <h5 class="text-xs font-extrabold text-slate-800 truncate mt-0.5" title="${k}">${k}</h5>
+                </div>
+                <div class="mt-3 border-t border-slate-200/50 pt-2 grid grid-cols-2 gap-2">
+                  <div class="space-y-0.5">
+                    <span class="text-[8px] font-extrabold text-slate-400 uppercase block">Gender</span>
+                    <span class="text-[10px] font-bold text-indigo-600 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> L: ${item.l}
+                    </span>
+                    <span class="text-[10px] font-bold text-pink-600 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 bg-pink-500 rounded-full"></span> P: ${item.p}
+                    </span>
+                  </div>
+                  <div class="space-y-0.5">
+                    <span class="text-[8px] font-extrabold text-slate-400 uppercase block">Agama</span>
+                    <span class="text-[10px] font-bold text-blue-600 flex items-center gap-1" title="Islam">
+                      <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Islam: ${item.islam}
+                    </span>
+                    <span class="text-[10px] font-bold text-amber-600 flex items-center gap-1" title="Kristen / Katolik">
+                      <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> Kris: ${item.kristen}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center mt-3 pt-2 border-t border-slate-100">
+                  <span class="text-[9px] font-extrabold text-slate-400 uppercase">Total Siswa</span>
+                  <span class="text-lg font-black text-slate-800 tracking-tight">${item.total}</span>
+                </div>
+              </div>
+            `;
+          });
+        }
+        breakdownContainer.innerHTML = listHtml;
+      }
 
       // ==================== RENDERING VISUAL DENGAN CHART.JS ====================
       // Hancurkan instansi lama untuk mencegah kebocoran memori / error kanvas
