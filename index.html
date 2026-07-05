@@ -320,7 +320,7 @@
         
         <!-- SECTION 1: BERANDA / DASHBOARD -->
         <section id="panel-dashboard" class="content-panel fade-in space-y-8">
-          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl flex justify-between items-center relative overflow-hidden">
+          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 flex justify-between items-center relative overflow-hidden">
             <div class="z-10">
               <h2 class="text-xl md:text-2xl font-extrabold" id="greetingUser">Selamat Datang, Administrator!</h2>
               <p class="text-indigo-100 text-xs md:text-sm mt-1.5 max-w-lg">Semua database terhubung langsung secara real-time. Anda bisa menambah, mengubah, dan memantau siswa, guru, serta tenaga kependidikan dari satu portal terpadu.</p>
@@ -647,6 +647,66 @@
     </div>
   </div>
 
+  <!-- MODAL FORM INPUT & EDIT DATA (PEMBUNGKUS UTAMA DISESUAIKAN MENJADI FORM BERPADU) -->
+  <div id="formModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <form id="modalDataForm" onsubmit="submitFormData(event)" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
+      <!-- Bagian Atas / Header Modal -->
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <h3 id="modalHeaderTitle" class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Formulir Data</h3>
+        <button type="button" onclick="triggerCloseModal()" class="text-slate-400 hover:text-slate-600 transition p-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      
+      <!-- Wadah Khusus untuk Dinamis Input Elemen (Mencegah Kehilangan Komponen Submit/Batal) -->
+      <div id="modalFormFields" class="p-6 space-y-4 max-h-[50vh] overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Input akan diinjeksi di sini -->
+      </div>
+      
+      <!-- Bagian Bawah / Footer Modal -->
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2.5">
+        <button onclick="triggerCloseModal()" type="button" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-500/10 cursor-pointer">Simpan Data</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- MODAL PILIHAN AKSI HAPUS KHUSUS DATA SISWA -->
+  <div id="deleteChoiceModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Pilih Aksi Hapus Siswa</h3>
+        <button onclick="closeDeleteChoiceModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+      <div class="p-6">
+        <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+          Anda sedang menghapus data siswa bernama <strong id="deleteSiswaName" class="text-slate-950 font-extrabold">Nama Siswa</strong>. Silakan pilih jenis tindakan yang ingin dijalankan:
+        </p>
+        <div class="space-y-3">
+          <!-- Tombol Pilihan 1: Pindahkan ke Siswa Keluar -->
+          <button onclick="executeDeleteSiswa('keluar')" class="w-full py-3.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-2xl text-xs transition flex items-center justify-between border border-indigo-200/50 text-left">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-user-slash text-base"></i>
+              <span>Pindahkan ke "Data Siswa Keluar" (Hapus Keluar)</span>
+            </span>
+            <span class="fa-solid fa-chevron-right text-[10px]"></span>
+          </button>
+          <!-- Tombol Pilihan 2: Hapus Permanen -->
+          <button onclick="executeDeleteSiswa('permanen')" class="w-full py-3.5 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-2xl text-xs transition flex items-center justify-between border border-rose-200/50 text-left">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-trash-can text-base"></i>
+              <span>Hapus Permanen dari Basis Data</span>
+            </span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeDeleteChoiceModal()" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+      </div>
+    </div>
+  </div>
+
   <!-- SCRIPT PROGRAM ENGINE -->
   <script>
     let activeSheet = '';
@@ -822,7 +882,7 @@
         if (typeof google !== 'undefined' && typeof google.script !== 'undefined') {
           google.script.run
             .withSuccessHandler(res => { loaderState(false); resolve(res); })
-            .withFailureHandler(err => { loaderState(false); alertCustom("Error GAS: " + err, "Sistem Gagal", "error"); reject(err); })
+            .withFailureHandler(err => { loaderState(false); alertCustom("Error Server: " + err, "Sistem Gagal", "error"); reject(err); })
             [funcName](...params);
         }
         else if (cloudUrl) {
@@ -891,35 +951,6 @@
 
     function closeLoginConfigModal() {
       document.getElementById('loginConfigModal').classList.add('hidden');
-    }
-
-    function saveLoginCloudSettings() {
-      const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
-      if (!urlInput) {
-        alertCustom("Harap isi URL Google Apps Script Web App Anda!", "Form Kosong", "error");
-        return;
-      }
-      if (!urlInput.startsWith("https://script.google.com")) {
-        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Form Tidak Valid", "error");
-        return;
-      }
-
-      localStorage.setItem('dapodik_cloud_url', urlInput);
-      updateConnectionBadge();
-      
-      const settingsInput = document.getElementById('cloudAppScriptUrl');
-      if (settingsInput) settingsInput.value = urlInput;
-      
-      closeLoginConfigModal();
-      alertCustom("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.", "Sukses Terhubung", "success");
-    }
-
-    function resetLoginToLocalMode() {
-      localStorage.removeItem('dapodik_cloud_url');
-      document.getElementById('loginCloudUrlInput').value = '';
-      updateConnectionBadge();
-      closeLoginConfigModal();
-      alertCustom("Sistem dialihkan kembali ke Mode Demo Lokal.", "Kembali ke Offline", "info");
     }
 
     // BACKEND SIMULASI LOKAL (Offline fallback engine)
@@ -1382,9 +1413,11 @@
             bodyHtml += `<td class="px-3 py-3 truncate text-[11px] ${stickyClass}" style="${widthStyle} ${leftStyle}" title="${val}">${val}</td>`;
           });
           
+          // Menggunakan fallback `row._rowNum || (i + 2)` untuk memastikan ralat parameter tidak berlaku jika _rowNum kosong
+          const rowNum = row._rowNum || (i + 2);
           bodyHtml += `<td class="px-3 py-3 text-center space-x-1 border-l border-slate-100 bg-white sticky right-0 z-10 shadow-[-4px_0_8px_-3px_rgba(0,0,0,0.1)]" style="width: 110px; min-width: 110px; max-width: 110px; right: 0px !important;">
-            <button onclick="triggerOpenModal(${row._rowNum})" class="text-indigo-600 hover:bg-indigo-50 p-1 rounded" title="Edit Baris"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button onclick="deleteRecordData(${row._rowNum})" class="text-rose-500 hover:bg-rose-100 p-1 rounded" title="Hapus Baris"><i class="fa-solid fa-trash-can"></i></button>
+            <button onclick="triggerOpenModal(${rowNum})" class="text-indigo-600 hover:bg-indigo-50 p-1 rounded" title="Edit Baris"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deleteRecordData(${rowNum})" class="text-rose-500 hover:bg-rose-100 p-1 rounded" title="Hapus Baris"><i class="fa-solid fa-trash-can"></i></button>
           </td></tr>`;
         });
       }
@@ -1467,10 +1500,16 @@
     // Hanya kolom "Nama" yang wajib diisi (required), field lainnya opsional
     function triggerOpenModal(rowNum = null) {
       selectedRowIndex = rowNum;
-      const formEl = document.getElementById('modalDataForm');
-      document.getElementById('modalHeaderTitle').innerText = rowNum ? `Edit Data` : `Tambah Baru`;
+      const fieldsContainer = document.getElementById('modalFormFields');
+      const headerTitle = document.getElementById('modalHeaderTitle');
+      
+      if (headerTitle) {
+        headerTitle.innerText = rowNum ? `Edit Data` : `Tambah Baru`;
+      }
+      
       let inputsHtml = '';
-      const dataObj = rowNum ? cachedRowsData.find(r => r._rowNum === rowNum) : {};
+      // Menggunakan `==` sebagai ganti `===` agar toleran terhadap ralat perbandingan String vs Number
+      const dataObj = rowNum ? cachedRowsData.find(r => r._rowNum == rowNum) : {};
       
       activeHeaders.forEach(h => {
         if (h === 'UID') return;
@@ -1481,11 +1520,18 @@
         
         inputsHtml += `<div class="col-span-1">
           <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">${h}${requiredAsterisk}</label>
-          <input type="text" name="${h}" value="${dataObj[h] || ''}" ${requiredAttr} class="w-full px-3 py-2 border rounded-xl text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          <input type="text" name="${h}" value="${dataObj[h] !== undefined ? dataObj[h] : ''}" ${requiredAttr} class="w-full px-3 py-2 border rounded-xl text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
         </div>`;
       });
-      formEl.innerHTML = inputsHtml;
-      document.getElementById('formModal').classList.remove('hidden');
+      
+      if (fieldsContainer) {
+        fieldsContainer.innerHTML = inputsHtml;
+      }
+      
+      const formModal = document.getElementById('formModal');
+      if (formModal) {
+        formModal.classList.remove('hidden');
+      }
     }
 
     function triggerCloseModal() { document.getElementById('formModal').classList.add('hidden'); }
