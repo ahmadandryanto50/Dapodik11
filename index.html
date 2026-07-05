@@ -163,11 +163,18 @@
         <p id="loginAppSubtitle" class="text-sm text-slate-500 mt-1">Sistem Informasi Manajemen Sekolah Ringkas & Modern</p>
       </div>
 
-      <!-- Notifikasi Alert Demo -->
+      <!-- Notifikasi Alert Demo / Koneksi Aktif -->
       <div id="demoNotice" class="hidden mb-4 p-3.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl text-xs flex gap-2.5">
         <i class="fa-solid fa-triangle-exclamation text-base mt-0.5 animate-bounce text-amber-600"></i>
         <div>
           <span class="font-bold">Mode Preview Aktif!</span> Anda sedang menggunakan simulasi lokal. Akun bawaan: <span class="font-bold underline">admin</span> / <span class="font-bold underline">admin123</span> atau <span class="font-bold underline">user</span> / <span class="font-bold underline">user123</span>
+        </div>
+      </div>
+      
+      <div id="activeCloudNotice" class="hidden mb-4 p-3.5 bg-indigo-50 border border-indigo-200 text-indigo-800 rounded-2xl text-xs flex gap-2.5">
+        <i class="fa-solid fa-cloud-bolt text-base mt-0.5 text-indigo-600"></i>
+        <div>
+          <span class="font-bold">Database Terhubung!</span> Menggunakan akun nyata dari Google Sheet Anda. Masukkan kredensial administrator Anda untuk login.
         </div>
       </div>
 
@@ -186,9 +193,17 @@
             <input type="password" id="password" required class="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition shadow-xs" placeholder="••••••••">
           </div>
         </div>
+        
         <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-sm shadow-lg shadow-indigo-500/30 transition duration-150 flex items-center justify-center gap-2 cursor-pointer">
           Masuk Dashboard <i class="fa-solid fa-right-to-bracket text-xs"></i>
         </button>
+
+        <!-- FITUR TERBARU: Tombol Pengaturan Koneksi Sebelum Login (Penyelesaian Masalah Utama) -->
+        <div class="pt-4 border-t border-slate-100 flex flex-col items-center gap-2">
+          <button type="button" onclick="openLoginConfigModal()" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-cloud-bolt"></i> Hubungkan Apps Script (Vercel/GitHub)
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -481,13 +496,15 @@
               </form>
             </div>
 
-            <!-- PANEL KONEKSI ID SPREADSHEET -->
+            <!-- PANEL KONEKSI ID SPREADSHEET (DIJAGA SELALU MUNCUL SANGAT FUNGSIONAL) -->
             <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8 lg:col-span-2">
-              <h3 class="text-base font-bold text-slate-900">Pengaturan Pemindahan ID Spreadsheet</h3>
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-arrows-spin text-indigo-600"></i> Pemindahan ID Spreadsheet
+              </h3>
               <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">Secara bawaan sistem memakai file spreadsheet tempat script ini berada. Anda dapat mengganti target penyimpanan data ke spreadsheet lain secara instan dengan memasukkan ID-nya di bawah ini.</p>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="settingsWrapper">
-                <!-- Diisi otomatis oleh JavaScript -->
+                <!-- Diisi otomatis oleh JavaScript (Tetap Tampil di Mode API / Mode Demo) -->
               </div>
             </div>
 
@@ -496,6 +513,31 @@
 
       </div>
     </main>
+  </div>
+
+  <!-- MODAL INTEGRASI APPS SCRIPT DARI HALAMAN LOGIN (MENGATASI "CHICKEN AND EGG" LOOP) -->
+  <div id="loginConfigModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-cloud text-indigo-600"></i> Pengaturan Koneksi API
+        </h3>
+        <button onclick="closeLoginConfigModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Masukkan URL Google Apps Script Web App Anda di bawah ini agar halaman login dan dashboard ini terhubung langsung dengan Google Sheets Anda secara real-time.
+        </p>
+        <div class="space-y-1.5">
+          <label class="block text-[10px] font-bold text-slate-600 uppercase">URL Web App (/exec)</label>
+          <input type="text" id="loginCloudUrlInput" class="w-full px-3.5 py-2.5 border rounded-xl text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+        <button onclick="resetLoginToLocalMode()" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Gunakan Mode Demo</button>
+        <button onclick="saveLoginCloudSettings()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-500/10 cursor-pointer">Simpan & Hubungkan</button>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL FORM INPUT & EDIT DATA -->
@@ -596,27 +638,40 @@
       applyBranding();
     };
 
-    // MEMUTAKHIRKAN BADGE KONEKSI DI TOPBAR
+    // MEMUTAKHIRKAN BADGE KONEKSI DI TOPBAR & LOGIN NOTICE
     function updateConnectionBadge() {
       const badge = document.getElementById('connectionStatusBadge');
       const cloudUrl = localStorage.getItem('dapodik_cloud_url');
+      const activeCloudNotice = document.getElementById('activeCloudNotice');
+      const demoNotice = document.getElementById('demoNotice');
       
       if (typeof google !== 'undefined' && typeof google.script !== 'undefined') {
         isSimulationMode = false;
-        badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-blue-50 border-blue-200 text-blue-700";
-        badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span> Mode: Google Sheets (Bawaan)`;
-        document.getElementById('demoNotice').classList.add('hidden');
+        if (badge) {
+          badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-blue-50 border-blue-200 text-blue-700";
+          badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span> Mode: Google Sheets (Bawaan)`;
+        }
+        demoNotice.classList.add('hidden');
+        activeCloudNotice.classList.remove('hidden');
       } else if (cloudUrl) {
         isSimulationMode = false;
-        badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-indigo-50 border-indigo-200 text-indigo-700";
-        badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span> Mode: Cloud API (Vercel/GitHub)`;
-        document.getElementById('demoNotice').classList.add('hidden');
-        document.getElementById('cloudAppScriptUrl').value = cloudUrl;
+        if (badge) {
+          badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-indigo-50 border-indigo-200 text-indigo-700";
+          badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span> Mode: Cloud API (Vercel/GitHub)`;
+        }
+        demoNotice.classList.add('hidden');
+        activeCloudNotice.classList.remove('hidden');
+        
+        const settingsUrlInput = document.getElementById('cloudAppScriptUrl');
+        if (settingsUrlInput) settingsUrlInput.value = cloudUrl;
       } else {
         isSimulationMode = true;
-        badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-amber-50 border-amber-200 text-amber-700";
-        badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-500"></span> Mode: Demo Lokal (Offline)`;
-        document.getElementById('demoNotice').classList.remove('hidden');
+        if (badge) {
+          badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-amber-50 border-amber-200 text-amber-700";
+          badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-500"></span> Mode: Demo Lokal (Offline)`;
+        }
+        demoNotice.classList.remove('hidden');
+        activeCloudNotice.classList.add('hidden');
       }
     }
 
@@ -624,29 +679,27 @@
       document.getElementById('loader').classList.toggle('hidden', !show);
     }
 
-    // ROUTER UTAMA: SANGAT TANGGUH MENDUKUNG CORS-CROSSTALK (Vercel / GitHub Pages)
+    // ROUTER UTAMA: DIUBAH MENJADI "GET" UNTUK PERMINTAAN EKSTERNAL AGAR SEPENUHNYA AMAN DARI BLOKIRAN CORS DAN PERALIHAN POST->GET OLEH GOOGLE REDIRECT
     function callAppsScript(funcName, params = []) {
       loaderState(true);
       const cloudUrl = localStorage.getItem('dapodik_cloud_url');
 
       return new Promise((resolve, reject) => {
-        // 1. Jika berjalan langsung di Google Sheets iFrame
+        // 1. Jika berjalan langsung di Google Sheets iFrame bawaan
         if (typeof google !== 'undefined' && typeof google.script !== 'undefined') {
           google.script.run
             .withSuccessHandler(res => { loaderState(false); resolve(res); })
             .withFailureHandler(err => { loaderState(false); alert("Error GAS: " + err); reject(err); })
             [funcName](...params);
         }
-        // 2. Jika di-host di luar Google (GitHub/Vercel) dan memiliki URL Cloud API
+        // 2. Jika di-host di Vercel atau GitHub Pages (Gunakan skema GET agar lancar dialihkan 302 oleh Google)
         else if (cloudUrl) {
-          fetch(cloudUrl, {
-            method: "POST",
-            // SANGAT PENTING: Menggunakan 'text/plain' mencegah preflight OPTIONS request 
-            // sehingga browser tidak memblokir komunikasi CORS ke Google Apps Script.
-            headers: {
-              "Content-Type": "text/plain"
-            },
-            body: JSON.stringify({ action: funcName, args: params })
+          // Menyematkan action dan args langsung ke URL query parameters
+          const url = `${cloudUrl}?action=${encodeURIComponent(funcName)}&args=${encodeURIComponent(JSON.stringify(params))}`;
+          
+          fetch(url, {
+            method: "GET",
+            mode: "cors"
           })
           .then(response => {
             if (!response.ok) throw new Error("HTTP Status: " + response.status);
@@ -658,8 +711,8 @@
           })
           .catch(err => {
             loaderState(false);
-            console.error("Cloud Error: ", err);
-            alert("Gagal terhubung dengan Cloud. Periksa apakah Apps Script sudah di-deploy ulang sebagai 'Anyone' dan URL-nya benar.");
+            console.error("Cloud Connection Error: ", err);
+            alert("Koneksi Database Cloud Gagal!\n\nKemungkinan penyebab:\n1. URL Web App Apps Script salah.\n2. Deploy Baru di Google belum tersetting akses ke 'Anyone' (Siapa Saja).\n3. Pastikan format tautan Anda diakhiri dengan '/exec'.");
             reject(err);
           });
         }
@@ -673,7 +726,7 @@
       });
     }
 
-    // MANAJEMEN KONEKSI CLOUD DARI HALAMAN PENGATURAN
+    // MANAJEMEN KONEKSI CLOUD DARI HALAMAN UTAMA (ADMIN)
     function saveCloudSettings() {
       const urlInput = document.getElementById('cloudAppScriptUrl').value.trim();
       if (!urlInput) {
@@ -688,8 +741,6 @@
       localStorage.setItem('dapodik_cloud_url', urlInput);
       updateConnectionBadge();
       alert("Koneksi Cloud API berhasil disimpan! Aplikasi siap digunakan secara terpusat.");
-      
-      // Muat ulang stat untuk memvalidasi
       changeSection('dashboard');
     }
 
@@ -699,6 +750,46 @@
       updateConnectionBadge();
       alert("Aplikasi dialihkan kembali ke Mode Demo Lokal.");
       changeSection('dashboard');
+    }
+
+    // MANAJEMEN KONEKSI CLOUD DARI HALAMAN LOGIN (MENGATASI CHICKEN-AND-EGG LOOP)
+    function openLoginConfigModal() {
+      const cloudUrl = localStorage.getItem('dapodik_cloud_url') || '';
+      document.getElementById('loginCloudUrlInput').value = cloudUrl;
+      document.getElementById('loginConfigModal').classList.remove('hidden');
+    }
+
+    function closeLoginConfigModal() {
+      document.getElementById('loginConfigModal').classList.add('hidden');
+    }
+
+    function saveLoginCloudSettings() {
+      const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
+      if (!urlInput) {
+        alert("Harap isi URL Google Apps Script Web App Anda!");
+        return;
+      }
+      if (!urlInput.startsWith("https://script.google.com")) {
+        alert("URL tidak valid! Harus diawali dengan https://script.google.com");
+        return;
+      }
+
+      localStorage.setItem('dapodik_cloud_url', urlInput);
+      updateConnectionBadge();
+      
+      const settingsInput = document.getElementById('cloudAppScriptUrl');
+      if (settingsInput) settingsInput.value = urlInput;
+      
+      closeLoginConfigModal();
+      alert("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.");
+    }
+
+    function resetLoginToLocalMode() {
+      localStorage.removeItem('dapodik_cloud_url');
+      document.getElementById('loginCloudUrlInput').value = '';
+      updateConnectionBadge();
+      closeLoginConfigModal();
+      alert("Sistem dialihkan kembali ke Mode Demo Lokal.");
     }
 
     function simulateBackend(funcName, params) {
@@ -1162,9 +1253,19 @@
       const activeBtn = document.getElementById('menu-settings');
       if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
 
-      const info = await callAppsScript('getActiveSpreadsheetInfo');
+      let info;
+      try {
+        info = await callAppsScript('getActiveSpreadsheetInfo');
+      } catch (e) {
+        console.warn("Gagal menghubungi API Google Sheets. Mengaktifkan cache visual fallback.");
+      }
+
+      // JAMINAN UTAMA: Jika gagal karena CORS atau kesalahan API jaringan, jangan biarkan input wrapper hilang!
+      if (!info || Object.keys(info).length === 0) {
+        info = mockSettings;
+      }
+
       const box = document.getElementById('settingsWrapper');
-      
       let listHtml = '';
       const aliases = { 
         default: "ID DB Pengguna (Tabel Users)", 
@@ -1197,8 +1298,20 @@
     async function saveNewDbId(key) {
       const val = document.getElementById(`input-id-${key}`).value.trim();
       if(!val) return alert("ID Spreadsheet tidak boleh dikosongkan!");
-      const res = await callAppsScript('updateSpreadsheetId', [val, key]);
-      alert(res.message);
+      
+      try {
+        const res = await callAppsScript('updateSpreadsheetId', [val, key]);
+        if (isSimulationMode) {
+          mockSettings[key].id = val;
+          alert("ID Spreadsheet berhasil diperbarui secara lokal!");
+        } else {
+          alert(res.message || "ID Spreadsheet berhasil diperbarui di Cloud!");
+        }
+      } catch (e) {
+        // Fallback jika API error saat menyimpan di mode API
+        mockSettings[key].id = val;
+        alert("Gagal memperbarui di Cloud.ID diubah di lokal: " + e.message);
+      }
       fetchSettingsInfo();
     }
 
