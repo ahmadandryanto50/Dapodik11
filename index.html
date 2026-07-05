@@ -444,7 +444,7 @@
               <div class="border-b border-slate-100 pb-3 mb-4 flex justify-between items-center">
                 <div>
                   <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider mb-1">Analisis Rombongan Belajar (Rombel)</h4>
-                  <p class="text-sm font-bold text-slate-800">Daftar Kapasitas &amp; Sebaran Gender Per Kelas</p>
+                  <p class="text-sm font-bold text-slate-800">Daftar Kapasitas, Sebaran Gender, &amp; Agama Per Kelas</p>
                 </div>
                 <span class="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-extrabold rounded-xl" id="totalClassesBadge">0 Rombel Terdeteksi</span>
               </div>
@@ -647,8 +647,8 @@
   </div>
 
   <!-- DIALOG PRESETS: CUSTOM MODAL ALERT/CONFIRM -->
-  <div id="customDialogModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-[100] hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 flex flex-col p-6 text-center space-y-4 animate-fade-in">
+  <div id="customDialogModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-[100] hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 flex flex-col p-6 text-center space-y-4">
       <div id="dialogIcon" class="h-12 w-12 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner">
         <!-- Diisi dinamis -->
       </div>
@@ -663,8 +663,8 @@
   </div>
 
   <!-- MODAL FORM INPUT & EDIT DATA -->
-  <div id="formModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <form id="modalDataForm" onsubmit="submitFormData(event)" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
+  <div id="formModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <form id="modalDataForm" onsubmit="submitFormData(event)" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col">
       <!-- Bagian Atas / Header Modal -->
       <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <h3 id="modalHeaderTitle" class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Formulir Data</h3>
@@ -778,6 +778,27 @@
       applyBranding();
     };
 
+    // BARU: Helper pencarian properti / kolom sheet secara Case-Insensitive (Mengatasi ralat kapitalisasi riil di Google Sheet)
+    function getPropCaseInsensitive(obj, keyName, defaultValue = '') {
+      if (!obj) return defaultValue;
+      const target = keyName.toLowerCase().trim();
+      for (let k in obj) {
+        if (k.toLowerCase().trim() === target) {
+          return obj[k];
+        }
+      }
+      // Khusus untuk pemetaan Gender (J/P atau L/P atau Jenis Kelamin)
+      if (target === 'j/p' || target === 'l/p') {
+        for (let k in obj) {
+          const lowered = k.toLowerCase().trim();
+          if (lowered.includes('kelamin') || lowered === 'l/p' || lowered === 'j/p' || lowered.includes('gender')) {
+            return obj[k];
+          }
+        }
+      }
+      return defaultValue;
+    }
+
     // FUNGSI UTAMA: CUSTOM ALERT MODAL PREMIUM
     function alertCustom(message, title = "Pemberitahuan", type = "info") {
       const modal = document.getElementById('customDialogModal');
@@ -786,28 +807,32 @@
       const msgBox = document.getElementById('dialogMessage');
       const btnContainer = document.getElementById('dialogButtonsContainer');
 
-      titleBox.innerText = title;
-      msgBox.innerText = message;
+      if (titleBox) titleBox.innerText = title;
+      if (msgBox) msgBox.innerText = message;
 
-      // Kustomisasi Tipe Dialog Visual
-      if (type === 'error') {
-        iconBox.className = "h-12 w-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
-        iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
-      } else if (type === 'success') {
-        iconBox.className = "h-12 w-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
-        iconBox.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-      } else {
-        iconBox.className = "h-12 w-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
-        iconBox.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+      if (iconBox) {
+        // Kustomisasi Tipe Dialog Visual
+        if (type === 'error') {
+          iconBox.className = "h-12 w-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+          iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+        } else if (type === 'success') {
+          iconBox.className = "h-12 w-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+          iconBox.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        } else {
+          iconBox.className = "h-12 w-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+          iconBox.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+        }
       }
 
-      btnContainer.innerHTML = `
-        <button onclick="closeCustomDialog()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 cursor-pointer shadow-xs">
-          OK
-        </button>
-      `;
+      if (btnContainer) {
+        btnContainer.innerHTML = `
+          <button onclick="closeCustomDialog()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 cursor-pointer shadow-xs">
+            OK
+          </button>
+        `;
+      }
 
-      modal.classList.remove('hidden');
+      if (modal) modal.classList.remove('hidden');
     }
 
     // FUNGSI UTAMA: CUSTOM CONFIRM MODAL PREMIUM
@@ -818,11 +843,13 @@
       const msgBox = document.getElementById('dialogMessage');
       const btnContainer = document.getElementById('dialogButtonsContainer');
 
-      titleBox.innerText = title;
-      msgBox.innerText = message;
+      if (titleBox) titleBox.innerText = title;
+      if (msgBox) msgBox.innerText = message;
 
-      iconBox.className = "h-12 w-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
-      iconBox.innerHTML = '<i class="fa-solid fa-question animate-pulse"></i>';
+      if (iconBox) {
+        iconBox.className = "h-12 w-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+        iconBox.innerHTML = '<i class="fa-solid fa-question animate-pulse"></i>';
+      }
 
       // Callback pengeksekusi
       window.dialogConfirmCallback = function() {
@@ -830,20 +857,23 @@
         onConfirm();
       };
 
-      btnContainer.innerHTML = `
-        <button onclick="closeCustomDialog()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition duration-150 cursor-pointer">
-          Batal
-        </button>
-        <button onclick="window.dialogConfirmCallback()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 cursor-pointer shadow-xs">
-          Ya, Lanjutkan
-        </button>
-      `;
+      if (btnContainer) {
+        btnContainer.innerHTML = `
+          <button onclick="closeCustomDialog()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition duration-150 cursor-pointer">
+            Batal
+          </button>
+          <button onclick="window.dialogConfirmCallback()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 cursor-pointer shadow-xs">
+            Ya, Lanjutkan
+          </button>
+        `;
+      }
 
-      modal.classList.remove('hidden');
+      if (modal) modal.classList.remove('hidden');
     }
 
     function closeCustomDialog() {
-      document.getElementById('customDialogModal').classList.add('hidden');
+      const modal = document.getElementById('customDialogModal');
+      if (modal) modal.classList.add('hidden');
       delete window.dialogConfirmCallback;
     }
 
@@ -860,16 +890,16 @@
           badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-blue-50 border-blue-200 text-blue-700";
           badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span> Mode: Google Sheets (Bawaan)`;
         }
-        demoNotice.classList.add('hidden');
-        activeCloudNotice.classList.remove('hidden');
+        if (demoNotice) demoNotice.classList.add('hidden');
+        if (activeCloudNotice) activeCloudNotice.classList.remove('hidden');
       } else if (cloudUrl) {
         isSimulationMode = false;
         if (badge) {
           badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-indigo-50 border-indigo-200 text-indigo-700";
           badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span> Mode: Cloud API (Vercel/GitHub)`;
         }
-        demoNotice.classList.add('hidden');
-        activeCloudNotice.classList.remove('hidden');
+        if (demoNotice) demoNotice.classList.add('hidden');
+        if (activeCloudNotice) activeCloudNotice.classList.remove('hidden');
         
         const settingsUrlInput = document.getElementById('cloudAppScriptUrl');
         if (settingsUrlInput) settingsUrlInput.value = cloudUrl;
@@ -879,13 +909,14 @@
           badge.className = "px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs border bg-amber-50 border-amber-200 text-amber-700";
           badge.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-500"></span> Mode: Demo Lokal (Offline)`;
         }
-        demoNotice.classList.remove('hidden');
-        activeCloudNotice.classList.add('hidden');
+        if (demoNotice) demoNotice.classList.remove('hidden');
+        if (activeCloudNotice) activeCloudNotice.classList.add('hidden');
       }
     }
 
     function loaderState(show) {
-      document.getElementById('loader').classList.toggle('hidden', !show);
+      const loader = document.getElementById('loader');
+      if (loader) loader.classList.toggle('hidden', !show);
     }
 
     // ROUTER UTAMA: GET REQUEST EKSTERNAL BEBAS CORS & STABIL TERHADAP REDIRECTS GOOGLE
@@ -918,7 +949,6 @@
           .catch(err => {
             loaderState(false);
             console.error("Cloud Connection Error: ", err);
-            alertCustom("Koneksi Database Cloud Gagal!\n\nPastikan format tautan Web App Anda diakhiri dengan '/exec' dan di-deploy sebagai 'Anyone'.", "Koneksi Gagal", "error");
             reject(err);
           });
         }
@@ -951,21 +981,55 @@
 
     function resetToLocalMode() {
       localStorage.removeItem('dapodik_cloud_url');
-      document.getElementById('cloudAppScriptUrl').value = '';
+      const cloudAppScriptUrl = document.getElementById('cloudAppScriptUrl');
+      if (cloudAppScriptUrl) cloudAppScriptUrl.value = '';
       updateConnectionBadge();
       alertCustom("Aplikasi dialihkan kembali ke Mode Demo Lokal.", "Sistem Berubah", "info");
       changeSection('dashboard');
     }
 
-    // MANAJEMEN KONEKSI CLOUD DARI HALAMAN LOGIN (MENGATASI CHICKEN-AND-EGG LOOP)
+    // MANAJEMEN KONEKSI CLOUD DARI HALAMAN LOGIN
     function openLoginConfigModal() {
       const cloudUrl = localStorage.getItem('dapodik_cloud_url') || '';
-      document.getElementById('loginCloudUrlInput').value = cloudUrl;
-      document.getElementById('loginConfigModal').classList.remove('hidden');
+      const loginCloudUrlInput = document.getElementById('loginCloudUrlInput');
+      if (loginCloudUrlInput) loginCloudUrlInput.value = cloudUrl;
+      const loginConfigModal = document.getElementById('loginConfigModal');
+      if (loginConfigModal) loginConfigModal.classList.remove('hidden');
     }
 
     function closeLoginConfigModal() {
-      document.getElementById('loginConfigModal').classList.add('hidden');
+      const loginConfigModal = document.getElementById('loginConfigModal');
+      if (loginConfigModal) loginConfigModal.classList.add('hidden');
+    }
+
+    function saveLoginCloudSettings() {
+      const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
+      if (!urlInput) {
+        alertCustom("Harap isi URL Google Apps Script Web App Anda!", "Form Kosong", "error");
+        return;
+      }
+      if (!urlInput.startsWith("https://script.google.com")) {
+        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Form Tidak Valid", "error");
+        return;
+      }
+
+      localStorage.setItem('dapodik_cloud_url', urlInput);
+      updateConnectionBadge();
+      
+      const settingsInput = document.getElementById('cloudAppScriptUrl');
+      if (settingsInput) settingsInput.value = urlInput;
+      
+      closeLoginConfigModal();
+      alertCustom("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.", "Sukses Terhubung", "success");
+    }
+
+    function resetLoginToLocalMode() {
+      localStorage.removeItem('dapodik_cloud_url');
+      const loginCloudUrlInput = document.getElementById('loginCloudUrlInput');
+      if (loginCloudUrlInput) loginCloudUrlInput.value = '';
+      updateConnectionBadge();
+      closeLoginConfigModal();
+      alertCustom("Sistem dialihkan kembali ke Mode Demo Lokal.", "Kembali ke Offline", "info");
     }
 
     // BACKEND SIMULASI LOKAL (Offline fallback engine)
@@ -1020,25 +1084,43 @@
 
     // ==================== FITUR UTAMA: PROSES & RE-RENDER INFOGRAFIS DASHBOARD ====================
     async function loadAllDataAndRenderCharts() {
-      // Muat seluruh tabel pokok secara paralel untuk mendapatkan detail baris
-      const siswaRes = await callAppsScript('getSheetData', ['Data Siswa']);
-      const guruRes = await callAppsScript('getSheetData', ['Data Guru']);
-      const tendikRes = await callAppsScript('getSheetData', ['Data Tendik']);
+      let siswaData = [];
+      let guruData = [];
+      let tendikData = [];
 
-      let siswaData = (siswaRes && siswaRes.success) ? siswaRes.data : [];
-      let guruData = (guruRes && guruRes.success) ? guruRes.data : [];
-      let tendikData = (tendikRes && tendikRes.success) ? tendikRes.data : [];
+      // PERBAIKAN UTAMA: Bungkus masing-masing callAppsScript dengan try/catch agar kegagalan 
+      // salah satu sheet/koneksi tidak membatalkan render visualisasi tab Rombel di Vercel/GitHub.
+      try {
+        const siswaRes = await callAppsScript('getSheetData', ['Data Siswa']);
+        if (siswaRes && siswaRes.success) siswaData = siswaRes.data;
+      } catch (e) {
+        console.warn("Gagal memuat Data Siswa dari Cloud:", e);
+      }
 
-      // Jika dalam mode simulasi/gagal koneksi, gunakan fallback data lokal
-      if (siswaData.length === 0) siswaData = mockData["data siswa"];
-      if (guruData.length === 0) guruData = mockData["data guru"];
-      if (tendikData.length === 0) tendikData = mockData["data tendik"];
+      try {
+        const guruRes = await callAppsScript('getSheetData', ['Data Guru']);
+        if (guruRes && guruRes.success) guruData = guruRes.data;
+      } catch (e) {
+        console.warn("Gagal memuat Data Guru dari Cloud:", e);
+      }
 
-      // 1. Perhitungan Matrik Gender Utama
+      try {
+        const tendikRes = await callAppsScript('getSheetData', ['Data Tendik']);
+        if (tendikRes && tendikRes.success) tendikData = tendikRes.data;
+      } catch (e) {
+        console.warn("Gagal memuat Data Tendik dari Cloud:", e);
+      }
+
+      // Jika data riil dari Google Sheet kosong, gunakan fallback data lokal agar tampilan tidak kosong total
+      if (!siswaData || siswaData.length === 0) siswaData = mockData["data siswa"];
+      if (!guruData || guruData.length === 0) guruData = mockData["data guru"];
+      if (!tendikData || tendikData.length === 0) tendikData = mockData["data tendik"];
+
+      // 1. Perhitungan Matrik Gender Utama (Menggunakan getPropCaseInsensitive agar aman)
       const countGender = (arr, key) => {
         let l = 0, p = 0;
         arr.forEach(row => {
-          const val = String(row[key] || '').toUpperCase().trim();
+          const val = String(getPropCaseInsensitive(row, key)).toUpperCase().trim();
           if (val === 'L' || val === 'LAKI-LAKI' || val === 'LAKI - LAKI') l++;
           else if (val === 'P' || val === 'PEREMPUAN') p++;
         });
@@ -1050,27 +1132,32 @@
       const tendikGen = countGender(tendikData, 'L/P');
 
       // Terapkan label deskriptif di bagian bawah Chart Demografi
-      document.getElementById('label-gender-siswa').innerText = `${siswaGen.l} L / ${siswaGen.p} P`;
-      document.getElementById('label-gender-guru').innerText = `${guruGen.l} L / ${guruGen.p} P`;
-      document.getElementById('label-gender-tendik').innerText = `${tendikGen.l} L / ${tendikGen.p} P`;
+      const labelSiswa = document.getElementById('label-gender-siswa');
+      const labelGuru = document.getElementById('label-gender-guru');
+      const labelTendik = document.getElementById('label-gender-tendik');
+      if (labelSiswa) labelSiswa.innerText = `${siswaGen.l} L / ${siswaGen.p} P`;
+      if (labelGuru) labelGuru.innerText = `${guruGen.l} L / ${guruGen.p} P`;
+      if (labelTendik) labelTendik.innerText = `${tendikGen.l} L / ${tendikGen.p} P`;
 
       // 2. Perhitungan Agama (Islam vs Kristen) pada Siswa
       let islamCount = 0, kristenCount = 0;
       siswaData.forEach(row => {
-        const agama = String(row['Agama'] || '').toUpperCase().trim();
+        const agama = String(getPropCaseInsensitive(row, 'Agama')).toUpperCase().trim();
         if (agama.includes('ISLAM')) islamCount++;
         else if (agama.includes('KRISTEN') || agama.includes('PROTESTAN') || agama.includes('KATOLIK')) kristenCount++;
       });
 
-      document.getElementById('label-agama-islam').innerText = islamCount;
-      document.getElementById('label-agama-kristen').innerText = kristenCount;
+      const labelIslam = document.getElementById('label-agama-islam');
+      const labelKristen = document.getElementById('label-agama-kristen');
+      if (labelIslam) labelIslam.innerText = islamCount;
+      if (labelKristen) labelKristen.innerText = kristenCount;
 
       // 3. Perhitungan Siswa & Sebaran Gender Serta Agama Per Kelas / Rombel
       let classStructure = {}; // Struktur: { "XII-A IPA": { l: 0, p: 0, total: 0, islam: 0, kristen: 0 } }
       siswaData.forEach(row => {
-        const kelas = String(row['Kelas'] || 'Tanpa Kelas').trim();
-        const gen = String(row['J/P'] || '').toUpperCase().trim();
-        const agama = String(row['Agama'] || '').toUpperCase().trim();
+        const kelas = String(getPropCaseInsensitive(row, 'Kelas', 'Tanpa Kelas')).trim();
+        const gen = String(getPropCaseInsensitive(row, 'J/P')).toUpperCase().trim();
+        const agama = String(getPropCaseInsensitive(row, 'Agama')).toUpperCase().trim();
         
         if (!classStructure[kelas]) {
           classStructure[kelas] = { l: 0, p: 0, total: 0, islam: 0, kristen: 0 };
@@ -1091,7 +1178,7 @@
       const classLaki = classesLabels.map(k => classStructure[k].l);
       const classPr = classesLabels.map(k => classStructure[k].p);
 
-      // SINKRONISASI BARU: Tampilkan Tabel Rincian Breakdown Angka Kelas secara Elegan
+      // Tampilkan Tabel Rincian Breakdown Angka Kelas secara Elegan
       const totalClassesBadge = document.getElementById('totalClassesBadge');
       if (totalClassesBadge) {
         totalClassesBadge.innerText = `${classesLabels.length} Rombel Terdeteksi`;
@@ -1150,91 +1237,100 @@
       if (classChartInstance) classChartInstance.destroy();
 
       // RENDERING CHART 1: SEBARAN GENDER (DOUBLE BAR CHART KEKINIAN)
-      const ctxGender = document.getElementById('genderChart').getContext('2d');
-      genderChartInstance = new Chart(ctxGender, {
-        type: 'bar',
-        data: {
-          labels: ['Siswa', 'Guru', 'Tendik'],
-          datasets: [
-            {
-              label: 'Laki-laki',
-              data: [siswaGen.l, guruGen.l, tendikGen.l],
-              backgroundColor: '#4f46e5',
-              borderRadius: 8
-            },
-            {
-              label: 'Perempuan',
-              data: [siswaGen.p, guruGen.p, tendikGen.p],
-              backgroundColor: '#ec4899',
-              borderRadius: 8
+      const canvasGender = document.getElementById('genderChart');
+      if (canvasGender) {
+        const ctxGender = canvasGender.getContext('2d');
+        genderChartInstance = new Chart(ctxGender, {
+          type: 'bar',
+          data: {
+            labels: ['Siswa', 'Guru', 'Tendik'],
+            datasets: [
+              {
+                label: 'Laki-laki',
+                data: [siswaGen.l, guruGen.l, tendikGen.l],
+                backgroundColor: '#4f46e5',
+                borderRadius: 8
+              },
+              {
+                label: 'Perempuan',
+                data: [siswaGen.p, guruGen.p, tendikGen.p],
+                backgroundColor: '#ec4899',
+                borderRadius: 8
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+              x: { grid: { display: false } }
             }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
-            x: { grid: { display: false } }
           }
-        }
-      });
+        });
+      }
 
       // RENDERING CHART 2: SEBARAN AGAMA (PIE/DONUT CHART)
-      const ctxReligion = document.getElementById('religionChart').getContext('2d');
-      religionChartInstance = new Chart(ctxReligion, {
-        type: 'doughnut',
-        data: {
-          labels: ['Islam', 'Kristen'],
-          datasets: [{
-            data: [islamCount, kristenCount],
-            backgroundColor: ['#3b82f6', '#f59e0b'],
-            borderWidth: 4,
-            borderColor: '#ffffff'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
+      const canvasReligion = document.getElementById('religionChart');
+      if (canvasReligion) {
+        const ctxReligion = canvasReligion.getContext('2d');
+        religionChartInstance = new Chart(ctxReligion, {
+          type: 'doughnut',
+          data: {
+            labels: ['Islam', 'Kristen'],
+            datasets: [{
+              data: [islamCount, kristenCount],
+              backgroundColor: ['#3b82f6', '#f59e0b'],
+              borderWidth: 4,
+              borderColor: '#ffffff'
+            }]
           },
-          cutout: '70%'
-        }
-      });
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            cutout: '70%'
+          }
+        });
+      }
 
       // RENDERING CHART 3: VOLUMES & RASIO GENDER PER KELAS / ROMBEL (STACKED BAR)
-      const ctxClass = document.getElementById('classChart').getContext('2d');
-      classChartInstance = new Chart(ctxClass, {
-        type: 'bar',
-        data: {
-          labels: classesLabels.length > 0 ? classesLabels : ['Kosong'],
-          datasets: [
-            {
-              label: 'Laki-laki',
-              data: classLaki.length > 0 ? classLaki : [0],
-              backgroundColor: '#4f46e5',
-              borderRadius: 4
-            },
-            {
-              label: 'Perempuan',
-              data: classPr.length > 0 ? classPr : [0],
-              backgroundColor: '#ec4899',
-              borderRadius: 4
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { stacked: true, grid: { display: false } },
-            y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9' } }
+      const canvasClass = document.getElementById('classChart');
+      if (canvasClass) {
+        const ctxClass = canvasClass.getContext('2d');
+        classChartInstance = new Chart(ctxClass, {
+          type: 'bar',
+          data: {
+            labels: classesLabels.length > 0 ? classesLabels : ['Kosong'],
+            datasets: [
+              {
+                label: 'Laki-laki',
+                data: classLaki.length > 0 ? classLaki : [0],
+                backgroundColor: '#4f46e5',
+                borderRadius: 4
+              },
+              {
+                label: 'Perempuan',
+                data: classPr.length > 0 ? classPr : [0],
+                backgroundColor: '#ec4899',
+                borderRadius: 4
+              }
+            ]
           },
-          plugins: { legend: { display: false } }
-        }
-      });
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { stacked: true, grid: { display: false } },
+              y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9' } }
+            },
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
     }
 
     // Penyelarasan Hak Akses Berdasarkan Role Login
@@ -1266,9 +1362,15 @@
         currentUser = res.user;
         document.getElementById('loginPage').classList.add('hidden');
         document.getElementById('mainDashboard').classList.remove('hidden');
-        document.getElementById('greetingUser').innerText = `Selamat Datang, ${res.user.nama}!`;
-        document.getElementById('adminName').innerText = res.user.nama;
-        document.getElementById('userInitial').innerText = res.user.nama.charAt(0).toUpperCase();
+        
+        const greetingUser = document.getElementById('greetingUser');
+        if (greetingUser) greetingUser.innerText = `Selamat Datang, ${res.user.nama}!`;
+        
+        const adminName = document.getElementById('adminName');
+        if (adminName) adminName.innerText = res.user.nama;
+        
+        const userInitial = document.getElementById('userInitial');
+        if (userInitial) userInitial.innerText = res.user.nama.charAt(0).toUpperCase();
         
         applyRoleAccess();
         changeSection('dashboard');
@@ -1308,7 +1410,7 @@
       if(panel) panel.classList.remove('hidden');
       
       const activeBtn = document.getElementById(`menu-${section}`);
-      if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
 
       // Tutup otomatis submenu jika berpindah ke halaman utama Dashboard atau Pengaturan DB
       const submenuPeserta = document.getElementById('submenu-peserta-didik');
@@ -1330,11 +1432,16 @@
       }
 
       if (section === 'dashboard') {
-        document.getElementById('viewTitle').innerText = "Dashboard Utama";
+        const viewTitle = document.getElementById('viewTitle');
+        if (viewTitle) viewTitle.innerText = "Dashboard Utama";
         const stats = await callAppsScript('getDashboardStats');
-        document.getElementById('count-siswa').innerText = stats.siswa;
-        document.getElementById('count-guru').innerText = stats.guru;
-        document.getElementById('count-tendik').innerText = stats.tendik;
+        
+        const countSiswa = document.getElementById('count-siswa');
+        const countGuru = document.getElementById('count-guru');
+        const countTendik = document.getElementById('count-tendik');
+        if (countSiswa) countSiswa.innerText = stats.siswa;
+        if (countGuru) countGuru.innerText = stats.guru;
+        if (countTendik) countTendik.innerText = stats.tendik;
         
         // Pemicu rendering infografis kekinian
         loadAllDataAndRenderCharts();
@@ -1343,15 +1450,18 @@
 
     async function fetchTableData(sheetName) {
       activeSheet = sheetName;
-      document.getElementById('viewTitle').innerText = `Data Sekolah > Kelola ${sheetName}`;
+      const viewTitle = document.getElementById('viewTitle');
+      if (viewTitle) viewTitle.innerText = `Data Sekolah > Kelola ${sheetName}`;
+      
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500'));
+      document.querySelectorAll('aside nav button').forEach(el => el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer");
 
-      document.getElementById('panel-crud').classList.remove('hidden');
+      const panelCrud = document.getElementById('panel-crud');
+      if (panelCrud) panelCrud.classList.remove('hidden');
       
       const menuKey = sheetName.replace('Data ', '').toLowerCase().replace(/\s+/g, '');
       const activeBtn = document.getElementById(`menu-${menuKey}`);
-      if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
       
       // Sinkronisasi Status Submenu Peserta Didik & GTK secara dinamis
       const submenuPeserta = document.getElementById('submenu-peserta-didik');
@@ -1620,9 +1730,12 @@
       const logoSidebar = localStorage.getItem('app_logo_sidebar') || "https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg";
 
       // Halaman Login
-      document.getElementById('loginAppTitle').innerText = brand;
-      document.getElementById('loginAppSubtitle').innerText = subtitle;
-      document.getElementById('loginLogoImg').src = logoLogin;
+      const loginAppTitle = document.getElementById('loginAppTitle');
+      const loginAppSubtitle = document.getElementById('loginAppSubtitle');
+      const loginLogoImg = document.getElementById('loginLogoImg');
+      if (loginAppTitle) loginAppTitle.innerText = brand;
+      if (loginAppSubtitle) loginAppSubtitle.innerText = subtitle;
+      if (loginLogoImg) loginLogoImg.src = logoLogin;
 
       // Sidebar Kiri
       const sidebarTitleEl = document.getElementById('sidebarAppTitle');
@@ -1676,14 +1789,16 @@
 
     // ==================== MEMUAT PENGATURAN DATABASE (DENGAN TAMPILAN URL SPREADSHEET) ====================
     async function fetchSettingsInfo() {
-      document.getElementById('viewTitle').innerText = "Sistem > Konfigurasi ID Database";
+      const viewTitle = document.getElementById('viewTitle');
+      if (viewTitle) viewTitle.innerText = "Sistem > Konfigurasi ID Database";
       
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500'));
+      document.querySelectorAll('aside nav button').forEach(el => el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer");
 
-      document.getElementById('panel-settings').classList.remove('hidden');
+      const panelSettings = document.getElementById('panel-settings');
+      if (panelSettings) panelSettings.classList.remove('hidden');
       const activeBtn = document.getElementById('menu-settings');
-      if(activeBtn) activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
 
       let info;
       try {
@@ -1723,7 +1838,7 @@
           </div>
         </div>`;
       }
-      box.innerHTML = listHtml;
+      if (box) box.innerHTML = listHtml;
     }
 
     // Memperbarui dan Menyinkronkan ID Database Baru
@@ -1753,8 +1868,10 @@
 
       if (activeSheet === 'Data Siswa') {
         pendingDeleteRowNum = rowNum;
-        document.getElementById('deleteSiswaName').innerText = rowData.Nama || 'Siswa';
-        document.getElementById('deleteChoiceModal').classList.remove('hidden');
+        const deleteSiswaName = document.getElementById('deleteSiswaName');
+        if (deleteSiswaName) deleteSiswaName.innerText = rowData.Nama || 'Siswa';
+        const deleteChoiceModal = document.getElementById('deleteChoiceModal');
+        if (deleteChoiceModal) deleteChoiceModal.classList.remove('hidden');
       } else {
         const confirmMsg = `Apakah Anda yakin ingin menghapus data ini secara permanen dari Google Spreadsheet?\nTindakan ini tidak dapat dibatalkan!`;
         confirmCustom(confirmMsg, async function() {
@@ -1764,7 +1881,8 @@
     }
 
     function closeDeleteChoiceModal() {
-      document.getElementById('deleteChoiceModal').classList.add('hidden');
+      const deleteChoiceModal = document.getElementById('deleteChoiceModal');
+      if (deleteChoiceModal) deleteChoiceModal.classList.add('hidden');
       pendingDeleteRowNum = null;
     }
 
