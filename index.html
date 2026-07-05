@@ -8,6 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Premium Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN untuk Visualisasi Statistik Premium -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
     
@@ -154,7 +156,7 @@
       <div class="text-center mb-8">
         <!-- Logo Sekolah Bulat Sempurna & Efek Melayang Naik-Turun -->
         <div class="inline-flex items-center justify-center w-24 h-24 mb-4 rounded-full border-2 border-indigo-100 shadow-lg bg-white overflow-hidden p-1.5 float-logo">
-          <img src="https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg" 
+          <img id="loginLogoImg" src="https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg" 
                alt="Logo Login" 
                class="w-full h-full object-contain rounded-full" 
                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=120&auto=format&fit=crop&q=60';">
@@ -198,7 +200,7 @@
           Masuk Dashboard <i class="fa-solid fa-right-to-bracket text-xs"></i>
         </button>
 
-        <!-- FITUR TERBARU: Tombol Pengaturan Koneksi Sebelum Login (Penyelesaian Masalah Utama) -->
+        <!-- Tombol Pengaturan Koneksi Sebelum Login -->
         <div class="pt-4 border-t border-slate-100 flex flex-col items-center gap-2">
           <button type="button" onclick="openLoginConfigModal()" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-cloud-bolt"></i> Hubungkan Apps Script (Vercel/GitHub)
@@ -217,7 +219,7 @@
         <div class="p-5 flex items-center gap-3 border-b border-slate-800 bg-slate-950/40">
           <!-- Logo Dashboard Bulat Elegan -->
           <div class="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <img src="https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg" 
+            <img id="sidebarLogoImg" src="https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg" 
                  alt="Logo Dashboard" 
                  class="w-full h-full object-cover" 
                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=120&auto=format&fit=crop&q=60';">
@@ -317,8 +319,8 @@
       <div class="p-6 md:p-8 flex-1">
         
         <!-- SECTION 1: BERANDA / DASHBOARD -->
-        <section id="panel-dashboard" class="content-panel fade-in">
-          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 flex justify-between items-center relative overflow-hidden">
+        <section id="panel-dashboard" class="content-panel fade-in space-y-8">
+          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl flex justify-between items-center relative overflow-hidden">
             <div class="z-10">
               <h2 class="text-xl md:text-2xl font-extrabold" id="greetingUser">Selamat Datang, Administrator!</h2>
               <p class="text-indigo-100 text-xs md:text-sm mt-1.5 max-w-lg">Semua database terhubung langsung secara real-time. Anda bisa menambah, mengubah, dan memantau siswa, guru, serta tenaga kependidikan dari satu portal terpadu.</p>
@@ -326,6 +328,7 @@
             <i class="fa-solid fa-cubes text-8xl text-white/5 absolute right-6 -bottom-4 transform rotate-12 pointer-events-none"></i>
           </div>
 
+          <!-- Metrik Angka Utama -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs flex items-center gap-5 hover:border-indigo-500/40 transition duration-150 group">
               <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-2xl shadow-xs group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-200">
@@ -355,6 +358,85 @@
                 <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Total Staf / Tendik</p>
                 <h3 class="text-3xl font-extrabold mt-0.5 text-slate-800" id="count-tendik">0</h3>
               </div>
+            </div>
+          </div>
+
+          <!-- PANEL INFOGRAFIS KEKINIAN -->
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-chart-pie text-indigo-600"></i> Visualisasi & Analisis Data Pokok
+                </h3>
+                <p class="text-xs text-slate-500">Statistik real-time kependidikan, sebaran demografi, rombel, dan agama.</p>
+              </div>
+              <button onclick="changeSection('dashboard')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-sync"></i> Refresh Infografis
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              <!-- CARD CHART 1: SEBARAN GENDER GTK & SISWA (PIE/DONUT) -->
+              <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider mb-1">Sebaran Demografi Gender</h4>
+                  <p class="text-sm font-bold text-slate-800 mb-4">Rasio Laki-laki & Perempuan</p>
+                </div>
+                <div class="h-64 flex items-center justify-center relative">
+                  <canvas id="genderChart"></canvas>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-4 text-center text-[10px] font-bold text-slate-600 border-t border-slate-100 pt-4">
+                  <div>
+                    <span class="block text-indigo-600 text-xs font-extrabold" id="label-gender-siswa">0 L / 0 P</span>
+                    Siswa Aktif
+                  </div>
+                  <div>
+                    <span class="block text-emerald-600 text-xs font-extrabold" id="label-gender-guru">0 L / 0 P</span>
+                    Pendidik (Guru)
+                  </div>
+                  <div>
+                    <span class="block text-amber-600 text-xs font-extrabold" id="label-gender-tendik">0 L / 0 P</span>
+                    Staf (Tendik)
+                  </div>
+                </div>
+              </div>
+
+              <!-- CARD CHART 2: SEBARAN AGAMA SISWA (PIE) -->
+              <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider mb-1">Sebaran Agama Siswa</h4>
+                  <p class="text-sm font-bold text-slate-800 mb-4">Proporsi Kepercayaan</p>
+                </div>
+                <div class="h-64 flex items-center justify-center relative">
+                  <canvas id="religionChart"></canvas>
+                </div>
+                <div class="flex justify-around mt-4 text-[11px] font-bold text-slate-600 border-t border-slate-100 pt-4">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 bg-blue-500 rounded-full inline-block"></span>
+                    <span>Islam: <strong id="label-agama-islam" class="text-slate-900">0</strong></span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 bg-amber-500 rounded-full inline-block"></span>
+                    <span>Kristen: <strong id="label-agama-kristen" class="text-slate-900">0</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CARD CHART 3: TOTAL SISWA & SEBARAN GENDER PER KELAS / ROMBEL -->
+              <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs flex flex-col justify-between lg:col-span-1">
+                <div>
+                  <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider mb-1">Kapasitas & Sebaran Rombel</h4>
+                  <p class="text-sm font-bold text-slate-800 mb-4">Jumlah Siswa Per Kelas</p>
+                </div>
+                <div class="h-64 flex items-center justify-center relative">
+                  <canvas id="classChart"></canvas>
+                </div>
+                <div class="text-center text-[10px] font-bold text-slate-400 border-t border-slate-100 pt-4">
+                  Grafik menunjukkan volume kapasitas dan rasio gender di setiap tingkatan kelas aktif.
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
@@ -437,7 +519,7 @@
             <!-- PANEL KONEKSI CLOUD (UNTUK DEPLOY KE GITHUB / VERCEL) -->
             <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8 space-y-6">
               <div>
-                <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <h3 class="text-base font-bold text-slate-900">
                   <i class="fa-solid fa-cloud text-indigo-600"></i> Integrasi Vercel / GitHub
                 </h3>
                 <p class="text-slate-400 text-xs mt-1 leading-relaxed">
@@ -470,7 +552,7 @@
             <!-- PANEL BRANDING IDENTITAS APLIKASI -->
             <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8">
               <h3 class="text-base font-bold text-slate-900">Kustomisasi Branding Aplikasi</h3>
-              <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">Ubah teks branding dan identitas aplikasi untuk Halaman Login dan Sidebar secara dinamis sesuai kebutuhan sekolah Anda.</p>
+              <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">Ubah teks branding, identitas aplikasi, serta logo sekolah dan logo foto sidebar secara dinamis sesuai kebutuhan sekolah Anda.</p>
               
               <form onsubmit="saveBrandingSettings(event)" class="space-y-4">
                 <div>
@@ -489,6 +571,15 @@
                   <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Sub-judul Sidebar</label>
                   <input type="text" id="brandSidebarSubtitle" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Sistem Mandiri">
                 </div>
+                <!-- BARU: PENGATURAN LOGO LOGIN & SIDEBAR -->
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">URL Logo Login Sekolah</label>
+                  <input type="text" id="brandLoginLogo" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="https://contoh.com/logo-login.png">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">URL Logo Sidebar Dashboard</label>
+                  <input type="text" id="brandSidebarLogo" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="https://contoh.com/logo-sidebar.png">
+                </div>
                 
                 <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xs shadow-md shadow-indigo-500/10 cursor-pointer transition flex items-center justify-center gap-2">
                   <i class="fa-solid fa-floppy-disk"></i> Simpan & Terapkan Branding
@@ -504,7 +595,7 @@
               <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">Secara bawaan sistem memakai file spreadsheet tempat script ini berada. Anda dapat mengganti target penyimpanan data ke spreadsheet lain secara instan dengan memasukkan ID-nya di bawah ini.</p>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="settingsWrapper">
-                <!-- Diisi otomatis oleh JavaScript (Tetap Tampil di Mode API / Mode Demo) -->
+                <!-- Diisi otomatis oleh JavaScript -->
               </div>
             </div>
 
@@ -515,7 +606,7 @@
     </main>
   </div>
 
-  <!-- MODAL INTEGRASI APPS SCRIPT DARI HALAMAN LOGIN (MENGATASI "CHICKEN AND EGG" LOOP) -->
+  <!-- MODAL INTEGRASI APPS SCRIPT DARI HALAMAN LOGIN -->
   <div id="loginConfigModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 animate-fade-in">
     <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col">
       <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
@@ -540,54 +631,18 @@
     </div>
   </div>
 
-  <!-- MODAL FORM INPUT & EDIT DATA -->
-  <div id="formModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
-      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-        <h3 id="modalHeaderTitle" class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Formulir Data</h3>
-        <button onclick="triggerCloseModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+  <!-- DIALOG PRESETS: CUSTOM MODAL ALERT/CONFIRM -->
+  <div id="customDialogModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-[100] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 flex flex-col p-6 text-center space-y-4 animate-fade-in">
+      <div id="dialogIcon" class="h-12 w-12 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner">
+        <!-- Diisi dinamis -->
       </div>
-      <form id="modalDataForm" onsubmit="submitFormData(event)" class="p-6 space-y-4 max-h-[60vh] overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
-      </form>
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2.5">
-        <button onclick="triggerCloseModal()" type="button" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
-        <button type="submit" form="modalDataForm" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-500/10 cursor-pointer">Simpan Data</button>
+      <div class="space-y-1">
+        <h3 id="dialogTitle" class="font-bold text-slate-900 text-base">Pemberitahuan</h3>
+        <p id="dialogMessage" class="text-xs text-slate-500 leading-relaxed">Isi pesan informasi dialog</p>
       </div>
-    </div>
-  </div>
-
-  <!-- MODAL PILIHAN AKSI HAPUS KHUSUS DATA SISWA -->
-  <div id="deleteChoiceModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col animate-fade-in">
-      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-        <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Pilih Aksi Hapus Siswa</h3>
-        <button onclick="closeDeleteChoiceModal()" class="text-slate-400 hover:text-slate-600 transition p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
-      </div>
-      <div class="p-6">
-        <p class="text-sm text-slate-600 mb-6 leading-relaxed">
-          Anda sedang menghapus data siswa bernama <strong id="deleteSiswaName" class="text-slate-950 font-extrabold">Nama Siswa</strong>. Silakan pilih jenis tindakan yang ingin dijalankan:
-        </p>
-        <div class="space-y-3">
-          <!-- Tombol Pilihan 1: Pindahkan ke Siswa Keluar -->
-          <button onclick="executeDeleteSiswa('keluar')" class="w-full py-3.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-2xl text-xs transition flex items-center justify-between border border-indigo-200/50 text-left">
-            <span class="flex items-center gap-3">
-              <i class="fa-solid fa-user-slash text-base"></i>
-              <span>Pindahkan ke "Data Siswa Keluar" (Hapus Keluar)</span>
-            </span>
-            <span class="fa-solid fa-chevron-right text-[10px]"></span>
-          </button>
-          <!-- Tombol Pilihan 2: Hapus Permanen -->
-          <button onclick="executeDeleteSiswa('permanen')" class="w-full py-3.5 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-2xl text-xs transition flex items-center justify-between border border-rose-200/50 text-left">
-            <span class="flex items-center gap-3">
-              <i class="fa-solid fa-trash-can text-base"></i>
-              <span>Hapus Permanen dari Basis Data</span>
-            </span>
-            <i class="fa-solid fa-chevron-right text-[10px]"></i>
-          </button>
-        </div>
-      </div>
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
-        <button onclick="closeDeleteChoiceModal()" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+      <div class="flex gap-2.5 pt-2" id="dialogButtonsContainer">
+        <!-- Diisi dinamis -->
       </div>
     </div>
   </div>
@@ -603,25 +658,35 @@
     let currentUser = null; // Status login pengguna aktif
     let pendingDeleteRowNum = null; // Penampung baris siswa yang akan didelete
 
-    // Data Simulasi (Diselaraskan persis dengan format kolom di gambar: Nama, Kelas, NIS, J/P)
+    // Instansiasi Grafik Chart.js secara Global
+    let genderChartInstance = null;
+    let religionChartInstance = null;
+    let classChartInstance = null;
+
+    // Data Simulasi (Diselaraskan persis dengan format kolom di gambar: Nama, Kelas, NIS, J/P, Agama)
     let mockData = {
       default: [
         { UID: "ADM01", Username: "admin", Password: "admin123", Role: "Admin", Nama: "Administrator Utama", Email: "admin@dapodik.id", Status: "Aktif" },
         { UID: "USR01", Username: "user", Password: "user123", Role: "User", Nama: "Staf Operator", Email: "staf@dapodik.id", Status: "Aktif" }
       ],
       "data siswa": [
-        { _rowNum: 2, NIS: "12345678", Nama: "Budi Santoso", Kelas: "XII-A IPA", "J/P": "L", Alamat: "Jl. Merdeka No. 10", "No HP": "08123456789", "Status Keaktifan": "Aktif" },
-        { _rowNum: 3, NIS: "87654321", Nama: "Siti Rahmawati", Kelas: "XI-B IPS", "J/P": "P", Alamat: "Jl. Mawar Gg. 3", "No HP": "08765432109", "Status Keaktifan": "Aktif" },
-        { _rowNum: 4, NIS: "11223344", Nama: "Fahmi Ramadhan", Kelas: "X-A IPA", "J/P": "L", Alamat: "Jl. Diponegoro No. 45", "No HP": "0852445566", "Status Keaktifan": "Aktif" }
+        { _rowNum: 2, NIS: "12345678", Nama: "Budi Santoso", Kelas: "XII-A IPA", "J/P": "L", Agama: "Islam", Alamat: "Jl. Merdeka No. 10", "No HP": "08123456789", "Status Keaktifan": "Aktif" },
+        { _rowNum: 3, NIS: "87654321", Nama: "Siti Rahmawati", Kelas: "XI-B IPS", "J/P": "P", Agama: "Islam", Alamat: "Jl. Mawar Gg. 3", "No HP": "08765432109", "Status Keaktifan": "Aktif" },
+        { _rowNum: 4, NIS: "11223344", Nama: "Fahmi Ramadhan", Kelas: "X-A IPA", "J/P": "L", Agama: "Kristen", Alamat: "Jl. Diponegoro No. 45", "No HP": "0852445566", "Status Keaktifan": "Aktif" },
+        { _rowNum: 5, NIS: "55661234", Nama: "Eka Putri", Kelas: "XII-A IPA", "J/P": "P", Agama: "Kristen", Alamat: "Jl. Flamboyan No. 2", "No HP": "0853778899", "Status Keaktifan": "Aktif" },
+        { _rowNum: 6, NIS: "77884432", Nama: "Rian Hidayat", Kelas: "XII-A IPA", "J/P": "L", Agama: "Islam", Alamat: "Jl. Anggrek No. 15", "No HP": "0812445522", "Status Keaktifan": "Aktif" },
+        { _rowNum: 7, NIS: "99001122", Nama: "Lina Marlina", Kelas: "XI-B IPS", "J/P": "P", Agama: "Islam", Alamat: "Jl. Kenanga 12", "No HP": "0813445566", "Status Keaktifan": "Aktif" }
       ],
       "data siswa keluar": [
-        { _rowNum: 2, NIS: "55667788", Nama: "Andi Wijaya", Kelas: "XII-B IPA", "J/P": "L", Alamat: "Jl. Sudirman No. 12", "No HP": "08987654321", "Status Keaktifan": "Keluar" }
+        { _rowNum: 2, NIS: "55667788", Nama: "Andi Wijaya", Kelas: "XII-B IPA", "J/P": "L", Agama: "Islam", Alamat: "Jl. Sudirman No. 12", "No HP": "08987654321", "Status Keaktifan": "Keluar" }
       ],
       "data guru": [
-        { _rowNum: 2, NUPTK: "9876543210", Nama: "Hendra Wijaya, S.Pd", "Mata Pelajaran": "Matematika", "L/P": "L", Email: "hendra@sekolah.sch.id", "No HP": "0811223344", "Status Kepegawaian": "PNS", NIP: "198412032009031002", "Pendidikan Terakhir": "S1 Pendidikan Matematika", "TMT Kerja": "01 Maret 2009", "Status Tugas": "Aktif Mengajar" }
+        { _rowNum: 2, NUPTK: "9876543210", Nama: "Hendra Wijaya, S.Pd", "Mata Pelajaran": "Matematika", "L/P": "L", Email: "hendra@sekolah.sch.id", "No HP": "0811223344", "Status Kepegawaian": "PNS", NIP: "198412032009031002", "Pendidikan Terakhir": "S1 Pendidikan Matematika", "TMT Kerja": "01 Maret 2009", "Status Tugas": "Aktif Mengajar" },
+        { _rowNum: 3, NUPTK: "8877665544", Nama: "Dewi Lestari, S.Pd", "Mata Pelajaran": "Bahasa Inggris", "L/P": "P", Email: "dewi@sekolah.sch.id", "No HP": "0812998877", "Status Kepegawaian": "Non-PNS", NIP: "-", "Pendidikan Terakhir": "S1 Pendidikan Sastra Inggris", "TMT Kerja": "01 Juli 2018", "Status Tugas": "Aktif Mengajar" }
       ],
       "data tendik": [
-        { _rowNum: 2, NIP: "19880415201101", Nama: "Ahmad Subarjo", Jabatan: "Kepala Tata Usaha", "L/P": "L", Email: "ahmad.tu@sekolah.sch.id", "No HP": "0822114433", Bagian: "Administrasi Utama", Pendidikan: "D3 Administration", "Status Pegawai": "PNS", "Alamat Tinggal": "Jl. Melati No. 4", "Status Kerja": "Aktif" }
+        { _rowNum: 2, NIP: "19880415201101", Nama: "Ahmad Subarjo", Jabatan: "Kepala Tata Usaha", "L/P": "L", Email: "ahmad.tu@sekolah.sch.id", "No HP": "0822114433", Bagian: "Administrasi Utama", Pendidikan: "D3 Administration", "Status Pegawai": "PNS", "Alamat Tinggal": "Jl. Melati No. 4", "Status Kerja": "Aktif" },
+        { _rowNum: 3, NIP: "19940112202010", Nama: "Riana Indah", Jabatan: "Pustakawan", "L/P": "P", Email: "riana.perpus@sekolah.sch.id", "No HP": "0857443322", Bagian: "Perpustakaan", Pendidikan: "S1 Ilmu Perpustakaan", "Status Pegawai": "Honor", "Alamat Tinggal": "Jl. Kamboja No. 9", "Status Kerja": "Aktif" }
       ]
     };
 
@@ -637,6 +702,75 @@
       updateConnectionBadge();
       applyBranding();
     };
+
+    // FUNGSI UTAMA: CUSTOM ALERT MODAL PREMIUM
+    function alertCustom(message, title = "Pemberitahuan", type = "info") {
+      const modal = document.getElementById('customDialogModal');
+      const iconBox = document.getElementById('dialogIcon');
+      const titleBox = document.getElementById('dialogTitle');
+      const msgBox = document.getElementById('dialogMessage');
+      const btnContainer = document.getElementById('dialogButtonsContainer');
+
+      titleBox.innerText = title;
+      msgBox.innerText = message;
+
+      // Kustomisasi Tipe Dialog Visual
+      if (type === 'error') {
+        iconBox.className = "h-12 w-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+        iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+      } else if (type === 'success') {
+        iconBox.className = "h-12 w-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+        iconBox.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      } else {
+        iconBox.className = "h-12 w-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+        iconBox.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+      }
+
+      btnContainer.innerHTML = `
+        <button onclick="closeCustomDialog()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 cursor-pointer shadow-xs">
+          OK
+        </button>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    // FUNGSI UTAMA: CUSTOM CONFIRM MODAL PREMIUM
+    function confirmCustom(message, onConfirm, title = "Konfirmasi Tindakan") {
+      const modal = document.getElementById('customDialogModal');
+      const iconBox = document.getElementById('dialogIcon');
+      const titleBox = document.getElementById('dialogTitle');
+      const msgBox = document.getElementById('dialogMessage');
+      const btnContainer = document.getElementById('dialogButtonsContainer');
+
+      titleBox.innerText = title;
+      msgBox.innerText = message;
+
+      iconBox.className = "h-12 w-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner";
+      iconBox.innerHTML = '<i class="fa-solid fa-question animate-pulse"></i>';
+
+      // Callback pengeksekusi
+      window.dialogConfirmCallback = function() {
+        closeCustomDialog();
+        onConfirm();
+      };
+
+      btnContainer.innerHTML = `
+        <button onclick="closeCustomDialog()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition duration-150 cursor-pointer">
+          Batal
+        </button>
+        <button onclick="window.dialogConfirmCallback()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 cursor-pointer shadow-xs">
+          Ya, Lanjutkan
+        </button>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeCustomDialog() {
+      document.getElementById('customDialogModal').classList.add('hidden');
+      delete window.dialogConfirmCallback;
+    }
 
     // MEMUTAKHIRKAN BADGE KONEKSI DI TOPBAR & LOGIN NOTICE
     function updateConnectionBadge() {
@@ -679,22 +813,19 @@
       document.getElementById('loader').classList.toggle('hidden', !show);
     }
 
-    // ROUTER UTAMA: DIUBAH MENJADI "GET" UNTUK PERMINTAAN EKSTERNAL AGAR SEPENUHNYA AMAN DARI BLOKIRAN CORS DAN PERALIHAN POST->GET OLEH GOOGLE REDIRECT
+    // ROUTER UTAMA: GET REQUEST EKSTERNAL BEBAS CORS & STABIL TERHADAP REDIRECTS GOOGLE
     function callAppsScript(funcName, params = []) {
       loaderState(true);
       const cloudUrl = localStorage.getItem('dapodik_cloud_url');
 
       return new Promise((resolve, reject) => {
-        // 1. Jika berjalan langsung di Google Sheets iFrame bawaan
         if (typeof google !== 'undefined' && typeof google.script !== 'undefined') {
           google.script.run
             .withSuccessHandler(res => { loaderState(false); resolve(res); })
-            .withFailureHandler(err => { loaderState(false); alert("Error GAS: " + err); reject(err); })
+            .withFailureHandler(err => { loaderState(false); alertCustom("Error GAS: " + err, "Sistem Gagal", "error"); reject(err); })
             [funcName](...params);
         }
-        // 2. Jika di-host di Vercel atau GitHub Pages (Gunakan skema GET agar lancar dialihkan 302 oleh Google)
         else if (cloudUrl) {
-          // Menyematkan action dan args langsung ke URL query parameters
           const url = `${cloudUrl}?action=${encodeURIComponent(funcName)}&args=${encodeURIComponent(JSON.stringify(params))}`;
           
           fetch(url, {
@@ -712,11 +843,10 @@
           .catch(err => {
             loaderState(false);
             console.error("Cloud Connection Error: ", err);
-            alert("Koneksi Database Cloud Gagal!\n\nKemungkinan penyebab:\n1. URL Web App Apps Script salah.\n2. Deploy Baru di Google belum tersetting akses ke 'Anyone' (Siapa Saja).\n3. Pastikan format tautan Anda diakhiri dengan '/exec'.");
+            alertCustom("Koneksi Database Cloud Gagal!\n\nPastikan format tautan Web App Anda diakhiri dengan '/exec' dan di-deploy sebagai 'Anyone'.", "Koneksi Gagal", "error");
             reject(err);
           });
         }
-        // 3. Jika tidak ada koneksi cloud, gunakan simulasi offline
         else {
           setTimeout(() => { 
             loaderState(false); 
@@ -730,17 +860,17 @@
     function saveCloudSettings() {
       const urlInput = document.getElementById('cloudAppScriptUrl').value.trim();
       if (!urlInput) {
-        alert("Harap isi URL Google Apps Script Web App terlebih dahulu!");
+        alertCustom("Harap isi URL Google Apps Script Web App terlebih dahulu!", "Peringatan", "error");
         return;
       }
       if (!urlInput.startsWith("https://script.google.com")) {
-        alert("URL tidak valid! Harus diawali dengan https://script.google.com");
+        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Peringatan", "error");
         return;
       }
 
       localStorage.setItem('dapodik_cloud_url', urlInput);
       updateConnectionBadge();
-      alert("Koneksi Cloud API berhasil disimpan! Aplikasi siap digunakan secara terpusat.");
+      alertCustom("Koneksi Cloud API berhasil disimpan! Aplikasi siap digunakan secara terpusat.", "Koneksi Sukses", "success");
       changeSection('dashboard');
     }
 
@@ -748,7 +878,7 @@
       localStorage.removeItem('dapodik_cloud_url');
       document.getElementById('cloudAppScriptUrl').value = '';
       updateConnectionBadge();
-      alert("Aplikasi dialihkan kembali ke Mode Demo Lokal.");
+      alertCustom("Aplikasi dialihkan kembali ke Mode Demo Lokal.", "Sistem Berubah", "info");
       changeSection('dashboard');
     }
 
@@ -766,11 +896,11 @@
     function saveLoginCloudSettings() {
       const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
       if (!urlInput) {
-        alert("Harap isi URL Google Apps Script Web App Anda!");
+        alertCustom("Harap isi URL Google Apps Script Web App Anda!", "Form Kosong", "error");
         return;
       }
       if (!urlInput.startsWith("https://script.google.com")) {
-        alert("URL tidak valid! Harus diawali dengan https://script.google.com");
+        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Form Tidak Valid", "error");
         return;
       }
 
@@ -781,7 +911,7 @@
       if (settingsInput) settingsInput.value = urlInput;
       
       closeLoginConfigModal();
-      alert("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.");
+      alertCustom("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.", "Sukses Terhubung", "success");
     }
 
     function resetLoginToLocalMode() {
@@ -789,9 +919,10 @@
       document.getElementById('loginCloudUrlInput').value = '';
       updateConnectionBadge();
       closeLoginConfigModal();
-      alert("Sistem dialihkan kembali ke Mode Demo Lokal.");
+      alertCustom("Sistem dialihkan kembali ke Mode Demo Lokal.", "Kembali ke Offline", "info");
     }
 
+    // BACKEND SIMULASI LOKAL (Offline fallback engine)
     function simulateBackend(funcName, params) {
       if (funcName === 'loginUser') {
         const [u, p] = params;
@@ -805,7 +936,7 @@
       if (funcName === 'getActiveSpreadsheetInfo') return mockSettings;
       if (funcName === 'getSheetData') {
         const key = params[0].toLowerCase().trim();
-        let headers = key === 'data siswa' || key === 'data siswa keluar' ? ["NIS", "Nama", "Kelas", "J/P", "Alamat", "No HP", "Status Keaktifan"] :
+        let headers = key === 'data siswa' || key === 'data siswa keluar' ? ["NIS", "Nama", "Kelas", "J/P", "Agama", "Alamat", "No HP", "Status Keaktifan"] :
                       key === 'data guru' ? ["NUPTK", "Nama", "Mata Pelajaran", "L/P", "Email", "No HP", "Status Kepegawaian", "NIP", "Pendidikan Terakhir", "TMT Kerja", "Status Tugas"] :
                                             ["NIP", "Nama", "Jabatan", "L/P", "Email", "No HP", "Bagian", "Pendidikan", "Status Pegawai", "Alamat Tinggal", "Status Kerja"];
         return { success: true, headers, data: mockData[key] || [] };
@@ -839,6 +970,166 @@
         }
         return { success: false, message: "Baris data tidak ditemukan." };
       }
+    }
+
+    // ==================== FITUR UTAMA: PROSES & RE-RENDER INFOGRAFIS DASHBOARD ====================
+    async function loadAllDataAndRenderCharts() {
+      // Muat seluruh tabel pokok secara paralel untuk mendapatkan detail baris
+      const siswaRes = await callAppsScript('getSheetData', ['Data Siswa']);
+      const guruRes = await callAppsScript('getSheetData', ['Data Guru']);
+      const tendikRes = await callAppsScript('getSheetData', ['Data Tendik']);
+
+      let siswaData = (siswaRes && siswaRes.success) ? siswaRes.data : [];
+      let guruData = (guruRes && guruRes.success) ? guruRes.data : [];
+      let tendikData = (tendikRes && tendikRes.success) ? tendikRes.data : [];
+
+      // Jika dalam mode simulasi/gagal koneksi, gunakan fallback data lokal
+      if (siswaData.length === 0) siswaData = mockData["data siswa"];
+      if (guruData.length === 0) guruData = mockData["data guru"];
+      if (tendikData.length === 0) tendikData = mockData["data tendik"];
+
+      // 1. Perhitungan Matrik Gender Utama
+      const countGender = (arr, key) => {
+        let l = 0, p = 0;
+        arr.forEach(row => {
+          const val = String(row[key] || '').toUpperCase().trim();
+          if (val === 'L' || val === 'LAKI-LAKI' || val === 'LAKI - LAKI') l++;
+          else if (val === 'P' || val === 'PEREMPUAN') p++;
+        });
+        return { l, p };
+      };
+
+      const siswaGen = countGender(siswaData, 'J/P');
+      const guruGen = countGender(guruData, 'L/P');
+      const tendikGen = countGender(tendikData, 'L/P');
+
+      // Terapkan label deskriptif di bagian bawah Chart Demografi
+      document.getElementById('label-gender-siswa').innerText = `${siswaGen.l} L / ${siswaGen.p} P`;
+      document.getElementById('label-gender-guru').innerText = `${guruGen.l} L / ${guruGen.p} P`;
+      document.getElementById('label-gender-tendik').innerText = `${tendikGen.l} L / ${tendikGen.p} P`;
+
+      // 2. Perhitungan Agama (Islam vs Kristen) pada Siswa
+      let islamCount = 0, kristenCount = 0;
+      siswaData.forEach(row => {
+        const agama = String(row['Agama'] || '').toUpperCase().trim();
+        if (agama.includes('ISLAM')) islamCount++;
+        else if (agama.includes('KRISTEN') || agama.includes('PROTESTAN') || agama.includes('KATOLIK')) kristenCount++;
+      });
+
+      document.getElementById('label-agama-islam').innerText = islamCount;
+      document.getElementById('label-agama-kristen').innerText = kristenCount;
+
+      // 3. Perhitungan Siswa & Sebaran Gender Per Kelas / Rombel
+      let classStructure = {}; // Struktur: { "XII-A IPA": { l: 0, p: 0, total: 0 } }
+      siswaData.forEach(row => {
+        const kelas = String(row['Kelas'] || 'Tanpa Kelas').trim();
+        const gen = String(row['J/P'] || '').toUpperCase().trim();
+        
+        if (!classStructure[kelas]) {
+          classStructure[kelas] = { l: 0, p: 0, total: 0 };
+        }
+        classStructure[kelas].total++;
+        if (gen === 'L' || gen === 'LAKI-LAKI' || gen === 'LAKI - LAKI') classStructure[kelas].l++;
+        else if (gen === 'P' || gen === 'PEREMPUAN') classStructure[kelas].p++;
+      });
+
+      const classesLabels = Object.keys(classStructure);
+      const classTotals = classesLabels.map(k => classStructure[k].total);
+      const classLaki = classesLabels.map(k => classStructure[k].l);
+      const classPr = classesLabels.map(k => classStructure[k].p);
+
+      // ==================== RENDERING VISUAL DENGAN CHART.JS ====================
+      // Hancurkan instansi lama untuk mencegah kebocoran memori / error kanvas
+      if (genderChartInstance) genderChartInstance.destroy();
+      if (religionChartInstance) religionChartInstance.destroy();
+      if (classChartInstance) classChartInstance.destroy();
+
+      // RENDERING CHART 1: SEBARAN GENDER (DOUBLE BAR CHART KEKINIAN)
+      const ctxGender = document.getElementById('genderChart').getContext('2d');
+      genderChartInstance = new Chart(ctxGender, {
+        type: 'bar',
+        data: {
+          labels: ['Siswa', 'Guru', 'Tendik'],
+          datasets: [
+            {
+              label: 'Laki-laki',
+              data: [siswaGen.l, guruGen.l, tendikGen.l],
+              backgroundColor: '#4f46e5',
+              borderRadius: 8
+            },
+            {
+              label: 'Perempuan',
+              data: [siswaGen.p, guruGen.p, tendikGen.p],
+              backgroundColor: '#ec4899',
+              borderRadius: 8
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      // RENDERING CHART 2: SEBARAN AGAMA (PIE/DONUT CHART)
+      const ctxReligion = document.getElementById('religionChart').getContext('2d');
+      religionChartInstance = new Chart(ctxReligion, {
+        type: 'doughnut',
+        data: {
+          labels: ['Islam', 'Kristen'],
+          datasets: [{
+            data: [islamCount, kristenCount],
+            backgroundColor: ['#3b82f6', '#f59e0b'],
+            borderWidth: 4,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          cutout: '70%'
+        }
+      });
+
+      // RENDERING CHART 3: VOLUMES & RASIO GENDER PER KELAS / ROMBEL (STACKED BAR)
+      const ctxClass = document.getElementById('classChart').getContext('2d');
+      classChartInstance = new Chart(ctxClass, {
+        type: 'bar',
+        data: {
+          labels: classesLabels.length > 0 ? classesLabels : ['Kosong'],
+          datasets: [
+            {
+              label: 'Laki-laki',
+              data: classLaki.length > 0 ? classLaki : [0],
+              backgroundColor: '#4f46e5',
+              borderRadius: 4
+            },
+            {
+              label: 'Perempuan',
+              data: classPr.length > 0 ? classPr : [0],
+              backgroundColor: '#ec4899',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
     }
 
     // Penyelarasan Hak Akses Berdasarkan Role Login
@@ -876,7 +1167,9 @@
         
         applyRoleAccess();
         changeSection('dashboard');
-      } else alert(res.message);
+      } else {
+        alertCustom(res.message, "Gagal Masuk", "error");
+      }
     }
 
     function triggerLogout() {
@@ -899,7 +1192,7 @@
     async function changeSection(section) {
       // Jika seksi yang dipilih adalah settings, pastikan hanya Admin yang diizinkan masuk
       if (section === 'settings' && (!currentUser || currentUser.role !== 'Admin')) {
-        alert("Akses Ditolak! Hanya administrator yang berhak mengakses pengaturan DB.");
+        alertCustom("Akses Ditolak! Hanya administrator yang berhak mengakses pengaturan DB.", "Akses Ditolak", "error");
         return;
       }
 
@@ -937,6 +1230,9 @@
         document.getElementById('count-siswa').innerText = stats.siswa;
         document.getElementById('count-guru').innerText = stats.guru;
         document.getElementById('count-tendik').innerText = stats.tendik;
+        
+        // Pemicu rendering infografis kekinian
+        loadAllDataAndRenderCharts();
       }
     }
 
@@ -1013,7 +1309,9 @@
         activeHeaders = res.headers;
         cachedRowsData = res.data;
         drawTableRows(res.headers, res.data);
-      } else alert(res.message);
+      } else {
+        alertCustom(res.message, "Gagal Memuat Data", "error");
+      }
     }
 
     // Fungsi pengubah limit tampilkan data
@@ -1102,7 +1400,7 @@
     // ==================== EKSPOR EXCEL SEBENARNYA SECARA DINAMIS ====================
     function downloadExcelData() {
       if (!cachedRowsData || cachedRowsData.length === 0) {
-        alert("Tidak ada data tabel untuk diekspor!");
+        alertCustom("Tidak ada data tabel untuk diekspor!", "Ekspor Gagal", "error");
         return;
       }
 
@@ -1198,26 +1496,36 @@
       const subtitle = localStorage.getItem('app_subtitle') || "Sistem Informasi Manajemen Sekolah Ringkas & Modern";
       const version = localStorage.getItem('app_version') || "DAPODIK V2";
       const subversion = localStorage.getItem('app_subversion') || "Sistem Mandiri";
+      const logoLogin = localStorage.getItem('app_logo_login') || "https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg";
+      const logoSidebar = localStorage.getItem('app_logo_sidebar') || "https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg";
 
       // Halaman Login
       document.getElementById('loginAppTitle').innerText = brand;
       document.getElementById('loginAppSubtitle').innerText = subtitle;
+      document.getElementById('loginLogoImg').src = logoLogin;
 
       // Sidebar Kiri
       const sidebarTitleEl = document.getElementById('sidebarAppTitle');
       const sidebarSubEl = document.getElementById('sidebarAppSubtitle');
+      const sidebarLogoImg = document.getElementById('sidebarLogoImg');
+      
       if (sidebarTitleEl) sidebarTitleEl.innerText = version;
       if (sidebarSubEl) sidebarSubEl.innerText = subversion;
+      if (sidebarLogoImg) sidebarLogoImg.src = logoSidebar;
 
       const brandInput = document.getElementById('brandLoginTitle');
       const subtitleInput = document.getElementById('brandLoginSubtitle');
       const sidebarInput = document.getElementById('brandSidebarTitle');
       const subSidebarInput = document.getElementById('brandSidebarSubtitle');
+      const loginLogoInput = document.getElementById('brandLoginLogo');
+      const sidebarLogoInput = document.getElementById('brandSidebarLogo');
 
       if (brandInput) brandInput.value = brand;
       if (subtitleInput) subtitleInput.value = subtitle;
       if (sidebarInput) sidebarInput.value = version;
       if (subSidebarInput) subSidebarInput.value = subversion;
+      if (loginLogoInput) loginLogoInput.value = logoLogin;
+      if (sidebarLogoInput) sidebarLogoInput.value = logoSidebar;
     }
 
     // Simpan Pengaturan Branding Baru
@@ -1227,9 +1535,11 @@
       const bSub = document.getElementById('brandLoginSubtitle').value.trim();
       const sTitle = document.getElementById('brandSidebarTitle').value.trim();
       const sSub = document.getElementById('brandSidebarSubtitle').value.trim();
+      const bLogo = document.getElementById('brandLoginLogo').value.trim();
+      const sLogo = document.getElementById('brandSidebarLogo').value.trim();
 
       if(!bTitle || !sTitle) {
-        alert("Judul tidak boleh kosong!");
+        alertCustom("Judul tidak boleh kosong!", "Peringatan", "error");
         return;
       }
 
@@ -1237,9 +1547,11 @@
       localStorage.setItem('app_subtitle', bSub);
       localStorage.setItem('app_version', sTitle);
       localStorage.setItem('app_subversion', sSub);
+      localStorage.setItem('app_logo_login', bLogo);
+      localStorage.setItem('app_logo_sidebar', sLogo);
 
       applyBranding();
-      alert("Branding Aplikasi Berhasil Diperbarui!");
+      alertCustom("Branding Aplikasi Berhasil Diperbarui!", "Sukses", "success");
     }
 
     // ==================== MEMUAT PENGATURAN DATABASE (DENGAN TAMPILAN URL SPREADSHEET) ====================
@@ -1297,20 +1609,19 @@
     // Memperbarui dan Menyinkronkan ID Database Baru
     async function saveNewDbId(key) {
       const val = document.getElementById(`input-id-${key}`).value.trim();
-      if(!val) return alert("ID Spreadsheet tidak boleh dikosongkan!");
+      if(!val) return alertCustom("ID Spreadsheet tidak boleh dikosongkan!", "Peringatan", "error");
       
       try {
         const res = await callAppsScript('updateSpreadsheetId', [val, key]);
         if (isSimulationMode) {
           mockSettings[key].id = val;
-          alert("ID Spreadsheet berhasil diperbarui secara lokal!");
+          alertCustom("ID Spreadsheet berhasil diperbarui secara lokal!", "Pembaruan Lokal", "success");
         } else {
-          alert(res.message || "ID Spreadsheet berhasil diperbarui di Cloud!");
+          alertCustom(res.message || "ID Spreadsheet berhasil diperbarui di Cloud!", "Sukses Cloud", "success");
         }
       } catch (e) {
-        // Fallback jika API error saat menyimpan di mode API
         mockSettings[key].id = val;
-        alert("Gagal memperbarui di Cloud.ID diubah di lokal: " + e.message);
+        alertCustom("Gagal memperbarui di Cloud. ID diubah sementara secara lokal: " + e.message, "Informasi", "info");
       }
       fetchSettingsInfo();
     }
@@ -1325,10 +1636,10 @@
         document.getElementById('deleteSiswaName').innerText = rowData.Nama || 'Siswa';
         document.getElementById('deleteChoiceModal').classList.remove('hidden');
       } else {
-        const confirmMsg = `Apakah Anda yakin ingin menghapus data ini secara permanen dari Google Spreadsheet?\n(Tindakan ini tidak dapat dibatalkan!)`;
-        if (confirm(confirmMsg)) {
+        const confirmMsg = `Apakah Anda yakin ingin menghapus data ini secara permanen dari Google Spreadsheet?\nTindakan ini tidak dapat dibatalkan!`;
+        confirmCustom(confirmMsg, async function() {
           await executeDirectDelete(activeSheet, rowNum);
-        }
+        }, "Hapus Data Permanen");
       }
     }
 
@@ -1354,7 +1665,7 @@
           
           const moveRes = await callAppsScript('addData', ['Data Siswa Keluar', recordToMove]);
           if (!moveRes.success) {
-            alert("Gagal memindahkan data ke Data Siswa Keluar: " + moveRes.message);
+            alertCustom("Gagal memindahkan data ke Data Siswa Keluar: " + moveRes.message, "Gagal Pemindahan", "error");
             return;
           }
         }
@@ -1362,16 +1673,16 @@
         const res = await callAppsScript('deleteData', [activeSheet, rowNum]);
         if (res.success) {
           if (tipe === 'keluar') {
-            alert(`Berhasil memindahkan "${rowData.Nama}" ke daftar Data Siswa Keluar!`);
+            alertCustom(`Berhasil memindahkan "${rowData.Nama}" ke daftar Data Siswa Keluar!`, "Pemindahan Sukses", "success");
           } else {
-            alert("Siswa berhasil dihapus secara permanen dari database!");
+            alertCustom("Siswa berhasil dihapus secara permanen dari database!", "Hapus Sukses", "success");
           }
           await fetchTableData(activeSheet);
         } else {
-          alert("Gagal menghapus data dari daftar aktif: " + res.message);
+          alertCustom("Gagal menghapus data dari daftar aktif: " + res.message, "Gagal Hapus", "error");
         }
       } catch (error) {
-        alert("Terjadi kesalahan sistem saat menghubungi cloud server.");
+        alertCustom("Terjadi kesalahan sistem saat menghubungi cloud server.", "Gagal Sistem", "error");
       }
     }
 
@@ -1380,13 +1691,13 @@
       try {
         const res = await callAppsScript('deleteData', [sheetName, rowNum]);
         if (res.success) {
-          alert("Data berhasil dihapus!");
+          alertCustom("Data berhasil dihapus!", "Hapus Sukses", "success");
           await fetchTableData(sheetName);
         } else {
-          alert("Gagal menghapus data: " + res.message);
+          alertCustom("Gagal menghapus data: " + res.message, "Gagal Hapus", "error");
         }
       } catch (error) {
-        alert("Terjadi kesalahan sistem saat menghubungi cloud server.");
+        alertCustom("Terjadi kesalahan sistem saat menghubungi cloud server.", "Gagal Sistem", "error");
       }
     }
 
@@ -1407,12 +1718,13 @@
         
         if (res.success) {
           triggerCloseModal();
+          alertCustom("Data berhasil disimpan!", "Penyimpanan Sukses", "success");
           await fetchTableData(activeSheet);
         } else {
-          alert("Gagal menyimpan data: " + res.message);
+          alertCustom("Gagal menyimpan data: " + res.message, "Gagal Simpan", "error");
         }
       } catch (err) {
-        alert("Gagal menghubungi server untuk penyimpanan.");
+        alertCustom("Gagal menghubungi server untuk penyimpanan.", "Koneksi Terputus", "error");
       }
     }
   </script>
