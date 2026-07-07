@@ -111,7 +111,6 @@
     .table-container::-webkit-scrollbar-thumb {
       background: #4f46e5 !important; /* Warna Indigo premium agar kontras dan mencolok */
       border-radius: 99px !important;
-      border: 3px solid #f1f5f9 !important;
       display: block !important;
     }
     .table-container::-webkit-scrollbar-thumb:hover {
@@ -320,7 +319,7 @@
         
         <!-- SECTION 1: BERANDA / DASHBOARD -->
         <section id="panel-dashboard" class="content-panel fade-in space-y-8">
-          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl flex justify-between items-center relative overflow-hidden">
+          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 flex justify-between items-center relative overflow-hidden">
             <div class="z-10">
               <h2 class="text-xl md:text-2xl font-extrabold" id="greetingUser">Selamat Datang, Administrator!</h2>
               <p class="text-indigo-100 text-xs md:text-sm mt-1.5 max-w-lg">Semua database terhubung langsung secara real-time. Anda bisa menambah, mengubah, dan memantau siswa, guru, serta tenaga kependidikan dari satu portal terpadu.</p>
@@ -534,7 +533,7 @@
             <!-- PANEL KONEKSI CLOUD (UNTUK DEPLOY KE GITHUB / VERCEL) -->
             <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8 space-y-6">
               <div>
-                <h3 class="text-base font-bold text-slate-900">
+                <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
                   <i class="fa-solid fa-cloud text-indigo-600"></i> Integrasi Vercel / GitHub
                 </h3>
                 <p class="text-slate-400 text-xs mt-1 leading-relaxed">
@@ -778,7 +777,7 @@
       applyBranding();
     };
 
-    // BARU: Helper pencarian properti / kolom sheet secara Case-Insensitive (Mengatasi ralat kapitalisasi riil di Google Sheet)
+    // Helper pencarian properti / kolom sheet secara Case-Insensitive (Mengatasi ralat kapitalisasi riil di Google Sheet)
     function getPropCaseInsensitive(obj, keyName, defaultValue = '') {
       if (!obj) return defaultValue;
       const target = keyName.toLowerCase().trim();
@@ -871,11 +870,13 @@
       if (modal) modal.classList.remove('hidden');
     }
 
+    // FUNGSI UTAMA: PENUTUP MODAL DIALOG KUSTOM (MEMPERBAIKI REFERENCEERROR)
     function closeCustomDialog() {
       const modal = document.getElementById('customDialogModal');
       if (modal) modal.classList.add('hidden');
       delete window.dialogConfirmCallback;
     }
+    window.closeCustomDialog = closeCustomDialog;
 
     // MEMUTAKHIRKAN BADGE KONEKSI DI TOPBAR & LOGIN NOTICE
     function updateConnectionBadge() {
@@ -979,6 +980,7 @@
       changeSection('dashboard');
     }
 
+    // MANDATORY RESET TO LOCAL MODE
     function resetToLocalMode() {
       localStorage.removeItem('dapodik_cloud_url');
       const cloudAppScriptUrl = document.getElementById('cloudAppScriptUrl');
@@ -1404,13 +1406,17 @@
       }
 
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500'));
+      document.querySelectorAll('aside nav button').forEach(el => {
+        el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      });
       
       const panel = document.getElementById(`panel-${section}`);
       if(panel) panel.classList.remove('hidden');
       
       const activeBtn = document.getElementById(`menu-${section}`);
-      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
+      if(activeBtn) {
+        activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      }
 
       // Tutup otomatis submenu jika berpindah ke halaman utama Dashboard atau Pengaturan DB
       const submenuPeserta = document.getElementById('submenu-peserta-didik');
@@ -1446,6 +1452,9 @@
         // Pemicu rendering infografis kekinian
         loadAllDataAndRenderCharts();
       }
+
+      // Selalu pastikan hak akses terjaga setelah perubahan seksi
+      applyRoleAccess();
     }
 
     async function fetchTableData(sheetName) {
@@ -1454,14 +1463,18 @@
       if (viewTitle) viewTitle.innerText = `Data Sekolah > Kelola ${sheetName}`;
       
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer");
+      document.querySelectorAll('aside nav button').forEach(el => {
+        el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      });
 
       const panelCrud = document.getElementById('panel-crud');
       if (panelCrud) panelCrud.classList.remove('hidden');
       
       const menuKey = sheetName.replace('Data ', '').toLowerCase().replace(/\s+/g, '');
       const activeBtn = document.getElementById(`menu-${menuKey}`);
-      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
+      if(activeBtn) {
+        activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      }
       
       // Sinkronisasi Status Submenu Peserta Didik & GTK secara dinamis
       const submenuPeserta = document.getElementById('submenu-peserta-didik');
@@ -1527,9 +1540,13 @@
       } else {
         alertCustom(res.message, "Gagal Memuat Data", "error");
       }
+
+      // Selalu pastikan hak akses terjaga setelah memuat data tabel
+      applyRoleAccess();
     }
 
     // Fungsi pengubah limit tampilkan data
+    // PERBAIKAN: Ditambahkan filter pencarian otomatis agar data ter-render sempurna
     function changeLimit(val) {
       rowsLimit = val;
       filterTableData();
@@ -1600,8 +1617,8 @@
           // Menggunakan fallback `row._rowNum || (i + 2)` untuk memastikan ralat parameter tidak berlaku jika _rowNum kosong
           const rowNum = row._rowNum || (i + 2);
           bodyHtml += `<td class="px-3 py-3 text-center space-x-1 border-l border-slate-100 bg-white sticky right-0 z-10 shadow-[-4px_0_8px_-3px_rgba(0,0,0,0.1)]" style="width: 110px; min-width: 110px; max-width: 110px; right: 0px !important;">
-            <button onclick="triggerOpenModal(${rowNum})" class="text-indigo-600 hover:bg-indigo-50 p-1 rounded" title="Edit Baris"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button onclick="deleteRecordData(${rowNum})" class="text-rose-500 hover:bg-rose-100 p-1 rounded" title="Hapus Baris"><i class="fa-solid fa-trash-can"></i></button>
+            <button type="button" onclick="triggerOpenModal(${rowNum})" class="text-indigo-600 hover:bg-indigo-50 p-1 rounded" title="Edit Baris"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button type="button" onclick="deleteRecordData(${rowNum})" class="text-rose-500 hover:bg-rose-100 p-1 rounded" title="Hapus Baris"><i class="fa-solid fa-trash-can"></i></button>
           </td></tr>`;
         });
       }
@@ -1793,12 +1810,16 @@
       if (viewTitle) viewTitle.innerText = "Sistem > Konfigurasi ID Database";
       
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer");
+      document.querySelectorAll('aside nav button').forEach(el => {
+        el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      });
 
       const panelSettings = document.getElementById('panel-settings');
       if (panelSettings) panelSettings.classList.remove('hidden');
       const activeBtn = document.getElementById('menu-settings');
-      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
+      if(activeBtn) {
+        activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      }
 
       let info;
       try {
