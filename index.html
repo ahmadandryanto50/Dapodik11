@@ -111,6 +111,7 @@
     .table-container::-webkit-scrollbar-thumb {
       background: #4f46e5 !important; /* Warna Indigo premium agar kontras dan mencolok */
       border-radius: 99px !important;
+      border: 3px solid #f1f5f9 !important;
       display: block !important;
     }
     .table-container::-webkit-scrollbar-thumb:hover {
@@ -367,14 +368,15 @@
                 <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                   <i class="fa-solid fa-chart-pie text-indigo-600"></i> Visualisasi & Analisis Data Pokok
                 </h3>
-                <p class="text-xs text-slate-500">Statistik real-time kependidikan, sebaran demografi, rombel, dan agama.</p>
+                <p class="text-xs text-slate-500">Statistik real-time kependidikan, sebaran demografi, dan agama.</p>
               </div>
               <button onclick="changeSection('dashboard')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 transition">
                 <i class="fa-solid fa-sync"></i> Refresh Infografis
               </button>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- MODIFIKASI: Mengubah grid menjadi lg:grid-cols-2 karena diagram sebaran kelas dilepas -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               <!-- CARD CHART 1: SEBARAN GENDER GTK & SISWA (PIE/DONUT) -->
               <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs flex flex-col justify-between">
@@ -419,20 +421,6 @@
                     <span class="w-3 h-3 bg-amber-500 rounded-full inline-block"></span>
                     <span>Kristen: <strong id="label-agama-kristen" class="text-slate-900">0</strong></span>
                   </div>
-                </div>
-              </div>
-
-              <!-- CARD CHART 3: TOTAL SISWA & SEBARAN GENDER PER KELAS / ROMBEL -->
-              <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs flex flex-col justify-between lg:col-span-1">
-                <div>
-                  <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider mb-1">Kapasitas & Sebaran Rombel</h4>
-                  <p class="text-sm font-bold text-slate-800 mb-4">Jumlah Siswa Per Kelas</p>
-                </div>
-                <div class="h-64 flex items-center justify-center relative">
-                  <canvas id="classChart"></canvas>
-                </div>
-                <div class="text-center text-[10px] font-bold text-slate-400 border-t border-slate-100 pt-4">
-                  Grafik menunjukkan volume kapasitas dan rasio gender di setiap tingkatan kelas aktif.
                 </div>
               </div>
 
@@ -506,7 +494,7 @@
             <!-- Petunjuk UI Horizontal Scroll -->
             <div class="px-5 py-2.5 bg-slate-100 text-slate-500 text-[11px] font-semibold border-b border-slate-200 flex items-center gap-2 w-full">
               <i class="fa-solid fa-arrows-left-right text-indigo-600 animate-pulse"></i>
-              <span><strong>Navigasi Aktif:</strong> Gunakan trackpad, scroll mouse, atau geser bilah ungu tebal di bawah tabel untuk melihat data kolom kanan (Halaman depan dibatasi kolom A sampai H).</span>
+              <span><strong>Navigasi Hack:</strong> Gunakan trackpad, scroll mouse, atau geser bilah ungu tebal di bawah tabel untuk melihat data kolom kanan (Halaman depan dibatasi kolom A sampai H).</span>
             </div>
 
             <!-- KONTINER SCROLLBAR & TABEL -->
@@ -1415,7 +1403,7 @@
       
       const activeBtn = document.getElementById(`menu-${section}`);
       if(activeBtn) {
-        activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+        activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
       }
 
       // Tutup otomatis submenu jika berpindah ke halaman utama Dashboard atau Pengaturan DB
@@ -1463,18 +1451,14 @@
       if (viewTitle) viewTitle.innerText = `Data Sekolah > Kelola ${sheetName}`;
       
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => {
-        el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
-      });
+      document.querySelectorAll('aside nav button').forEach(el => el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer");
 
       const panelCrud = document.getElementById('panel-crud');
       if (panelCrud) panelCrud.classList.remove('hidden');
       
       const menuKey = sheetName.replace('Data ', '').toLowerCase().replace(/\s+/g, '');
       const activeBtn = document.getElementById(`menu-${menuKey}`);
-      if(activeBtn) {
-        activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
-      }
+      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
       
       // Sinkronisasi Status Submenu Peserta Didik & GTK secara dinamis
       const submenuPeserta = document.getElementById('submenu-peserta-didik');
@@ -1546,7 +1530,6 @@
     }
 
     // Fungsi pengubah limit tampilkan data
-    // PERBAIKAN: Ditambahkan filter pencarian otomatis agar data ter-render sempurna
     function changeLimit(val) {
       rowsLimit = val;
       filterTableData();
@@ -1590,7 +1573,7 @@
         headerHtml += `<th class="px-3 py-3 text-[11px] ${stickyClass}" style="${widthStyle} ${leftStyle}">${h}</th>`;
       });
       headerHtml += `<th class="px-3 py-3 text-center text-[11px] bg-slate-900 sticky right-0 z-20" style="width: 110px; min-width: 110px; max-width: 110px; right: 0px !important; box-shadow: -4px 0 8px -3px rgba(0,0,0,0.2);">Aksi</th>`;
-      theadRow.innerHTML = headerHtml;
+      if (theadRow) theadRow.innerHTML = headerHtml;
 
       let bodyHtml = '';
       if(!displayDataList || displayDataList.length === 0) {
@@ -1622,7 +1605,7 @@
           </td></tr>`;
         });
       }
-      tbody.innerHTML = bodyHtml;
+      if (tbody) tbody.innerHTML = bodyHtml;
     }
 
     function filterTableData() {
@@ -1709,7 +1692,6 @@
       }
       
       let inputsHtml = '';
-      // Menggunakan `==` sebagai ganti `===` agar toleran terhadap ralat perbandingan String vs Number
       const dataObj = rowNum ? cachedRowsData.find(r => r._rowNum == rowNum) : {};
       
       activeHeaders.forEach(h => {
