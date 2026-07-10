@@ -328,10 +328,11 @@
             <i class="fa-solid fa-cubes text-8xl text-white/5 absolute right-6 -bottom-4 transform rotate-12 pointer-events-none"></i>
           </div>
 
-          <!-- BARU: SEKSI PROFIL SEKOLAH (SESUAI GAMBAR YANG DIUNGGAH) -->
+          <!-- SEKSI PROFIL SEKOLAH (DESAIN KEKINIAN & RAPAT) -->
           <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
             <div class="flex flex-col lg:flex-row gap-8">
-              <!-- Kolom Kiri: Detail Profil Sekolah -->
+              
+              <!-- Kolom Kiri: Detail Profil Sekolah Rapat & Elegan -->
               <div class="flex-1 space-y-6">
                 <div class="flex items-center gap-3.5 border-b border-slate-100 pb-4">
                   <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl shadow-xs">
@@ -343,87 +344,137 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3.5 text-xs text-slate-600">
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">NPSN</span>
-                    <strong id="profileNpsn" class="text-slate-800">40203578</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Bentuk Pendidikan</span>
-                    <strong id="profileBentuk" class="text-slate-800">SMP</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Status</span>
-                    <strong id="profileStatus" class="text-slate-800">Negeri</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Kecamatan</span>
-                    <strong id="profileKecamatan" class="text-slate-800">Kec. Tatanga</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Kabupaten</span>
-                    <strong id="profileKabupaten" class="text-slate-800">Kota Palu</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Provinsi</span>
-                    <strong id="profileProvinsi" class="text-slate-800">Prov. Sulawesi Tengah</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2 col-span-1 md:col-span-2">
-                    <span class="text-slate-400 font-medium">Kepala Sekolah</span>
-                    <strong id="profileKepsek" class="text-slate-800">Martha Taewa</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Operator</span>
-                    <strong id="profileOperator" class="text-slate-800">Ahmad Andryanto</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Username</span>
-                    <strong id="profileUsername" class="text-slate-800">smpnegeri11palu@gmail.com</strong>
+                <!-- Pembagian Tiga Kelompok Grid agar Rapat dan Rapi -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                  
+                  <!-- Kelompok 1: Identitas Utama Sekolah -->
+                  <div class="space-y-2 bg-slate-50/60 p-4 rounded-2xl border border-slate-100">
+                    <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 mb-2 border-b border-indigo-100 pb-1 flex items-center gap-1.5">
+                      <i class="fa-solid fa-circle-info"></i> Identitas Pokok
+                    </h4>
+                    
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">NPSN</span>
+                      <strong id="profileNpsn" class="col-span-8 text-slate-800">40203578</strong>
+                    </div>
+                    
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Bentuk Pend.</span>
+                      <strong id="profileBentuk" class="col-span-8 text-slate-800">SMP</strong>
+                    </div>
+                    
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Status</span>
+                      <strong id="profileStatus" class="col-span-8 text-slate-800">Negeri</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs border-b border-indigo-100 pb-1.5 hover:bg-indigo-100/30 px-1.5 py-0.5 rounded transition bg-indigo-50/50">
+                      <span class="col-span-4 text-indigo-600 font-bold">Kepala Sekolah</span>
+                      <strong id="profileKepsek" class="col-span-8 text-indigo-950 font-extrabold">Martha Taewa</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Operator</span>
+                      <strong id="profileOperator" class="col-span-8 text-slate-800">Ahmad Andryanto</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs pb-1 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Username</span>
+                      <strong id="profileUsername" class="col-span-8 text-slate-800 truncate" title="smpnegeri11palu@gmail.com">smpnegeri11palu@gmail.com</strong>
+                    </div>
                   </div>
 
-                  <!-- Jarak Pembatas -->
-                  <div class="col-span-1 md:col-span-2 my-1 border-t border-dashed border-slate-200"></div>
+                  <!-- Kelompok 2: Program Kerja & BOSP -->
+                  <div class="space-y-2 bg-slate-50/60 p-4 rounded-2xl border border-slate-100">
+                    <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 mb-2 border-b border-emerald-100 pb-1 flex items-center gap-1.5">
+                      <i class="fa-solid fa-graduation-cap"></i> Program & BOSP
+                    </h4>
 
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Sekolah Penggerak</span>
-                    <strong id="profilePenggerak" class="text-slate-800">Ya</strong>
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Skh Penggerak</span>
+                      <strong id="profilePenggerak" class="col-span-8 text-slate-800">Ya</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Imp. Kurikulum</span>
+                      <strong id="profileKurikulum" class="col-span-8 text-slate-800">Merdeka</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">TA Imp.</span>
+                      <strong id="profileTahunAjaran" class="col-span-8 text-slate-800">2022/2023</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs border-b border-emerald-100 pb-1.5 hover:bg-emerald-100/30 px-1.5 py-0.5 rounded transition bg-emerald-50/50">
+                      <span class="col-span-4 text-emerald-700 font-bold">Status BOSP</span>
+                      <strong id="profileBosp" class="col-span-8 text-emerald-800 font-bold">Bersedia Menerima BOSP</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs border-b border-slate-100/50 pb-1.5 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Bendahara BOSP</span>
+                      <strong id="profileBendahara" class="col-span-8 text-slate-800">AULIARIANI</strong>
+                    </div>
+
+                    <div class="grid grid-cols-12 text-xs pb-1 hover:bg-white px-1.5 py-0.5 rounded transition">
+                      <span class="col-span-4 text-slate-400 font-semibold">Informatika</span>
+                      <strong id="profileInformatika" class="col-span-8 text-slate-800">Diizinkan</strong>
+                    </div>
                   </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Implementasi Kurikulum</span>
-                    <strong id="profileKurikulum" class="text-slate-800">Merdeka</strong>
+
+                  <!-- Kelompok 3: Letak Geografis Sekolah -->
+                  <div class="md:col-span-2 space-y-2 bg-slate-50/60 p-4 rounded-2xl border border-slate-100">
+                    <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-amber-600 mb-2 border-b border-amber-100 pb-1 flex items-center gap-1.5">
+                      <i class="fa-solid fa-map-location-dot"></i> Letak Geografis Sekolah
+                    </h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
+                        <span class="col-span-4 text-slate-400 font-semibold">Kecamatan</span>
+                        <strong id="profileKecamatan" class="col-span-8 text-slate-800">Kec. Tatanga</strong>
+                      </div>
+                      
+                      <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
+                        <span class="col-span-4 text-slate-400 font-semibold">Kabupaten</span>
+                        <strong id="profileKabupaten" class="col-span-8 text-slate-800">Kota Palu</strong>
+                      </div>
+                      
+                      <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
+                        <span class="col-span-4 text-slate-400 font-semibold">Provinsi</span>
+                        <strong id="profileProvinsi" class="col-span-8 text-slate-800">Prov. Sulawesi Tengah</strong>
+                      </div>
+                    </div>
                   </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Tahun Ajaran Implementasi</span>
-                    <strong id="profileTahunAjaran" class="text-slate-800">2022/2023</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Status BOSP</span>
-                    <strong id="profileBosp" class="text-emerald-600 font-bold">Bersedia Menerima BOSP</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Bendahara BOSP</span>
-                    <strong id="profileBendahara" class="text-slate-800">AULIARIANI</strong>
-                  </div>
-                  <div class="flex justify-between border-b border-slate-50 pb-2">
-                    <span class="text-slate-400 font-medium">Matpel Informatika</span>
-                    <strong id="profileInformatika" class="text-slate-800">Diizinkan</strong>
-                  </div>
+
                 </div>
               </div>
 
-              <!-- Kolom Kanan: Banner "Satu Data Pendidikan Indonesia" -->
-              <div class="w-full lg:w-80 flex flex-col items-center justify-center bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-950 text-white p-8 rounded-3xl text-center shadow-lg relative overflow-hidden group min-h-[340px]">
-                <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                <div class="absolute -top-12 -right-12 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
+              <!-- Kolom Kanan: Banner "Satu Data Pendidikan Indonesia" & Logo Sekolah Pengganti Logo D -->
+              <div class="w-full lg:w-80 flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white p-8 rounded-3xl text-center shadow-lg relative overflow-hidden group min-h-[350px] border border-blue-800/30">
+                <div class="absolute inset-0 bg-radial-gradient from-blue-500/10 to-transparent opacity-50 pointer-events-none"></div>
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full pointer-events-none"></div>
+                <div class="absolute -bottom-16 -left-16 w-36 h-36 bg-blue-500/5 rounded-full pointer-events-none"></div>
                 
-                <!-- Logo Kotak Kuning dengan Huruf "D" -->
-                <div class="w-16 h-16 bg-amber-400 text-blue-950 font-black text-3xl flex items-center justify-center rounded-2xl shadow-xl shadow-amber-500/20 mb-6 transform group-hover:scale-105 transition-transform duration-300">
-                  D
+                <!-- Logo Sekolah Premium dengan Pola Orbits Kemendikbud -->
+                <div class="relative w-28 h-28 mb-6 flex items-center justify-center float-logo">
+                  <!-- Ring Orbit Luar Bersinar -->
+                  <div class="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/40 animate-[spin_10s_linear_infinite]"></div>
+                  <!-- Ring Orbit Dalam -->
+                  <div class="absolute inset-2 rounded-full border border-blue-400/30"></div>
+                  
+                  <!-- PERBAIKAN: Mengubah wadah background putih menjadi bulat sempurna (rounded-full) -->
+                  <div class="w-20 h-20 bg-white p-1 rounded-full shadow-xl shadow-indigo-950/40 transform group-hover:scale-105 transition-transform duration-300 relative z-10 border border-slate-200 overflow-hidden flex items-center justify-center">
+                    <img id="dashboardSchoolLogo" src="https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg" 
+                         alt="Logo Sekolah" 
+                         class="w-full h-full object-contain rounded-full" 
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=120&auto=format&fit=crop&q=60';">
+                  </div>
                 </div>
                 
-                <h4 class="text-lg font-black tracking-widest leading-snug">SATU DATA PENDIDIKAN INDONESIA</h4>
-                <p class="text-[10px] text-blue-200 mt-3 font-semibold uppercase tracking-wider">Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi</p>
+                <h4 class="text-sm font-black tracking-widest leading-snug text-amber-400 uppercase">SATU DATA PENDIDIKAN INDONESIA</h4>
+                <div class="w-12 h-0.5 bg-amber-400/30 my-3"></div>
+                <p class="text-[9px] text-blue-200 font-bold uppercase tracking-wider leading-relaxed">Kementerian Pendidikan, Kebudayaan,<br>Riset, dan Teknologi</p>
               </div>
+              
             </div>
           </div>
 
@@ -688,7 +739,7 @@
               </form>
             </div>
 
-            <!-- BARU: PANEL PENGATURAN PROFIL SEKOLAH UNTUK EDIT TULISAN SECARA DINAMIS -->
+            <!-- PANEL PENGATURAN PROFIL SEKOLAH UNTUK EDIT TULISAN SECARA DINAMIS -->
             <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xs">
               <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
                 <i class="fa-solid fa-graduation-cap text-indigo-600"></i> Pengaturan Informasi Profil Sekolah
@@ -1636,14 +1687,18 @@
       if (viewTitle) viewTitle.innerText = `Data Sekolah > Kelola ${sheetName}`;
       
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('aside nav button').forEach(el => el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer");
+      document.querySelectorAll('aside nav button').forEach(el => {
+        el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      });
 
       const panelCrud = document.getElementById('panel-crud');
       if (panelCrud) panelCrud.classList.remove('hidden');
       
       const menuKey = sheetName.replace('Data ', '').toLowerCase().replace(/\s+/g, '');
       const activeBtn = document.getElementById(`menu-${menuKey}`);
-      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer bg-slate-800 text-indigo-500 border-l-4 border-indigo-500";
+      if(activeBtn) {
+        activeBtn.classList.add('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+      }
       
       // Sinkronisasi Status Submenu Peserta Didik & GTK secara dinamis
       const submenuPeserta = document.getElementById('submenu-peserta-didik');
@@ -1902,6 +1957,7 @@
       }
     }
 
+    // MANDATORY CLOSE FORM MODAL
     function triggerCloseModal() { document.getElementById('formModal').classList.add('hidden'); }
 
     // ==================== METODE PENYELARASAN BRANDING DARI LOCALSTORAGE ====================
@@ -1972,6 +2028,10 @@
       if (loginAppTitle) loginAppTitle.innerText = brand;
       if (loginAppSubtitle) loginAppSubtitle.innerText = subtitle;
       if (loginLogoImg) loginLogoImg.src = logoLogin;
+
+      // Dashboard school logo pengganti logo D
+      const dashboardSchoolLogo = document.getElementById('dashboardSchoolLogo');
+      if (dashboardSchoolLogo) dashboardSchoolLogo.src = logoLogin;
 
       // Sidebar Kiri
       const sidebarTitleEl = document.getElementById('sidebarAppTitle');
