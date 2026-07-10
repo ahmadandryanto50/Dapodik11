@@ -430,7 +430,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
                         <span class="col-span-4 text-slate-400 font-semibold">Kecamatan</span>
-                        <strong id="profileKecamatan" class="col-span-8 text-slate-800">Kec. Tatanga</strong>
+                        <strong id="profileKecamatan" class="col-span-8 text-slate-800">Tatanga</strong>
                       </div>
                       
                       <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
@@ -440,7 +440,7 @@
                       
                       <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
                         <span class="col-span-4 text-slate-400 font-semibold">Provinsi</span>
-                        <strong id="profileProvinsi" class="col-span-8 text-slate-800">Prov. Sulawesi Tengah</strong>
+                        <strong id="profileProvinsi" class="col-span-8 text-slate-800">Sulawesi Tengah</strong>
                       </div>
                     </div>
                   </div>
@@ -768,7 +768,7 @@
                   </div>
                   <div>
                     <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kecamatan</label>
-                    <input type="text" id="setupKecamatan" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Kec. Tatanga">
+                    <input type="text" id="setupKecamatan" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Tatanga">
                   </div>
                   <div>
                     <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kabupaten</label>
@@ -776,7 +776,7 @@
                   </div>
                   <div>
                     <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Provinsi</label>
-                    <input type="text" id="setupProvinsi" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Prov. Sulawesi Tengah">
+                    <input type="text" id="setupProvinsi" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Sulawesi Tengah">
                   </div>
                   <div>
                     <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kepala Sekolah</label>
@@ -855,7 +855,7 @@
       </div>
       <div class="p-6 space-y-4">
         <p class="text-xs text-slate-500 leading-relaxed">
-          Masukkan URL Google Apps Script Web App Anda di bawah ini agar halaman login dan dashboard ini terhubung langsung dengan Google Sheets Anda secara real-time.
+          Masukkan URL Google Apps Script Web App Anda di bawah ini agar halaman login and dashboard ini terhubung langsung dengan Google Sheets Anda secara real-time.
         </p>
         <div class="space-y-1.5">
           <label class="block text-[10px] font-bold text-slate-600 uppercase">URL Web App (/exec)</label>
@@ -1228,36 +1228,6 @@
       if (loginConfigModal) loginConfigModal.classList.add('hidden');
     }
 
-    function saveLoginCloudSettings() {
-      const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
-      if (!urlInput) {
-        alertCustom("Harap isi URL Google Apps Script Web App Anda!", "Form Kosong", "error");
-        return;
-      }
-      if (!urlInput.startsWith("https://script.google.com")) {
-        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Form Tidak Valid", "error");
-        return;
-      }
-
-      localStorage.setItem('dapodik_cloud_url', urlInput);
-      updateConnectionBadge();
-      
-      const settingsInput = document.getElementById('cloudAppScriptUrl');
-      if (settingsInput) settingsInput.value = urlInput;
-      
-      closeLoginConfigModal();
-      alertCustom("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.", "Sukses Terhubung", "success");
-    }
-
-    function resetLoginToLocalMode() {
-      localStorage.removeItem('dapodik_cloud_url');
-      const loginCloudUrlInput = document.getElementById('loginCloudUrlInput');
-      if (loginCloudUrlInput) loginCloudUrlInput.value = '';
-      updateConnectionBadge();
-      closeLoginConfigModal();
-      alertCustom("Sistem dialihkan kembali ke Mode Demo Lokal.", "Kembali ke Offline", "info");
-    }
-
     // BACKEND SIMULASI LOKAL (Offline fallback engine)
     function simulateBackend(funcName, params) {
       if (funcName === 'loginUser') {
@@ -1306,6 +1276,36 @@
         }
         return { success: false, message: "Baris data tidak ditemukan." };
       }
+    }
+
+    function saveLoginCloudSettings() {
+      const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
+      if (!urlInput) {
+        alertCustom("Harap isi URL Google Apps Script Web App Anda!", "Form Kosong", "error");
+        return;
+      }
+      if (!urlInput.startsWith("https://script.google.com")) {
+        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Form Tidak Valid", "error");
+        return;
+      }
+
+      localStorage.setItem('dapodik_cloud_url', urlInput);
+      updateConnectionBadge();
+      
+      const settingsInput = document.getElementById('cloudAppScriptUrl');
+      if (settingsInput) settingsInput.value = urlInput;
+      
+      closeLoginConfigModal();
+      alertCustom("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.", "Sukses Terhubung", "success");
+    }
+
+    function resetLoginToLocalMode() {
+      localStorage.removeItem('dapodik_cloud_url');
+      const loginCloudUrlInput = document.getElementById('loginCloudUrlInput');
+      if (loginCloudUrlInput) loginCloudUrlInput.value = '';
+      updateConnectionBadge();
+      closeLoginConfigModal();
+      alertCustom("Sistem dialihkan kembali ke Mode Demo Lokal.", "Kembali ke Offline", "info");
     }
 
     // ==================== FITUR UTAMA: PROSES & RE-RENDER INFOGRAFIS DASHBOARD ====================
@@ -1969,14 +1969,14 @@
       const logoLogin = localStorage.getItem('app_logo_login') || "https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg";
       const logoSidebar = localStorage.getItem('app_logo_sidebar') || "https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg";
 
-      // BARU: Load data Profil Sekolah dengan nilai bawaan dari gambar jika kosong
+      // BARU: Load data Profil Sekolah dengan nilai bawaan dari gambar jika kosong (Sudah diperbaiki)
       const sName = localStorage.getItem('prof_school_name') || "SMP NEGERI 11 PALU";
       const sNpsn = localStorage.getItem('prof_npsn') || "40203578";
       const sBentuk = localStorage.getItem('prof_bentuk') || "SMP";
       const sStatus = localStorage.getItem('prof_status') || "Negeri";
-      const sKec = localStorage.getItem('prof_kecamatan') || "Kec. Tatanga";
+      const sKec = localStorage.getItem('prof_kecamatan') || "Tatanga";
       const sKab = localStorage.getItem('prof_kabupaten') || "Kota Palu";
-      const sProv = localStorage.getItem('prof_provinsi') || "Prov. Sulawesi Tengah";
+      const sProv = localStorage.getItem('prof_provinsi') || "Sulawesi Tengah";
       const sKepsek = localStorage.getItem('prof_kepsek') || "Martha Taewa";
       const sOperator = localStorage.getItem('prof_operator') || "Ahmad Andryanto";
       const sUsername = localStorage.getItem('prof_username') || "smpnegeri11palu@gmail.com";
