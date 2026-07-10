@@ -320,12 +320,111 @@
         
         <!-- SECTION 1: BERANDA / DASHBOARD -->
         <section id="panel-dashboard" class="content-panel fade-in space-y-8">
-          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 flex justify-between items-center relative overflow-hidden">
+          <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl flex justify-between items-center relative overflow-hidden">
             <div class="z-10">
               <h2 class="text-xl md:text-2xl font-extrabold" id="greetingUser">Selamat Datang, Administrator!</h2>
               <p class="text-indigo-100 text-xs md:text-sm mt-1.5 max-w-lg">Semua database terhubung langsung secara real-time. Anda bisa menambah, mengubah, dan memantau siswa, guru, serta tenaga kependidikan dari satu portal terpadu.</p>
             </div>
             <i class="fa-solid fa-cubes text-8xl text-white/5 absolute right-6 -bottom-4 transform rotate-12 pointer-events-none"></i>
+          </div>
+
+          <!-- BARU: SEKSI PROFIL SEKOLAH (SESUAI GAMBAR YANG DIUNGGAH) -->
+          <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <!-- Kolom Kiri: Detail Profil Sekolah -->
+              <div class="flex-1 space-y-6">
+                <div class="flex items-center gap-3.5 border-b border-slate-100 pb-4">
+                  <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl shadow-xs">
+                    <i class="fa-solid fa-school"></i>
+                  </div>
+                  <div>
+                    <h3 id="profileSchoolName" class="text-lg font-black text-slate-800 tracking-tight">SMP NEGERI 11 PALU</h3>
+                    <p class="text-xs text-slate-400 font-medium">Informasi Identitas & Status Operasional Sekolah</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3.5 text-xs text-slate-600">
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">NPSN</span>
+                    <strong id="profileNpsn" class="text-slate-800">40203578</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Bentuk Pendidikan</span>
+                    <strong id="profileBentuk" class="text-slate-800">SMP</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Status</span>
+                    <strong id="profileStatus" class="text-slate-800">Negeri</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Kecamatan</span>
+                    <strong id="profileKecamatan" class="text-slate-800">Kec. Tatanga</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Kabupaten</span>
+                    <strong id="profileKabupaten" class="text-slate-800">Kota Palu</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Provinsi</span>
+                    <strong id="profileProvinsi" class="text-slate-800">Prov. Sulawesi Tengah</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2 col-span-1 md:col-span-2">
+                    <span class="text-slate-400 font-medium">Kepala Sekolah</span>
+                    <strong id="profileKepsek" class="text-slate-800">Martha Taewa</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Operator</span>
+                    <strong id="profileOperator" class="text-slate-800">Ahmad Andryanto</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Username</span>
+                    <strong id="profileUsername" class="text-slate-800">smpnegeri11palu@gmail.com</strong>
+                  </div>
+
+                  <!-- Jarak Pembatas -->
+                  <div class="col-span-1 md:col-span-2 my-1 border-t border-dashed border-slate-200"></div>
+
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Sekolah Penggerak</span>
+                    <strong id="profilePenggerak" class="text-slate-800">Ya</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Implementasi Kurikulum</span>
+                    <strong id="profileKurikulum" class="text-slate-800">Merdeka</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Tahun Ajaran Implementasi</span>
+                    <strong id="profileTahunAjaran" class="text-slate-800">2022/2023</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Status BOSP</span>
+                    <strong id="profileBosp" class="text-emerald-600 font-bold">Bersedia Menerima BOSP</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Bendahara BOSP</span>
+                    <strong id="profileBendahara" class="text-slate-800">AULIARIANI</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-50 pb-2">
+                    <span class="text-slate-400 font-medium">Matpel Informatika</span>
+                    <strong id="profileInformatika" class="text-slate-800">Diizinkan</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Kolom Kanan: Banner "Satu Data Pendidikan Indonesia" -->
+              <div class="w-full lg:w-80 flex flex-col items-center justify-center bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-950 text-white p-8 rounded-3xl text-center shadow-lg relative overflow-hidden group min-h-[340px]">
+                <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
+                
+                <!-- Logo Kotak Kuning dengan Huruf "D" -->
+                <div class="w-16 h-16 bg-amber-400 text-blue-950 font-black text-3xl flex items-center justify-center rounded-2xl shadow-xl shadow-amber-500/20 mb-6 transform group-hover:scale-105 transition-transform duration-300">
+                  D
+                </div>
+                
+                <h4 class="text-lg font-black tracking-widest leading-snug">SATU DATA PENDIDIKAN INDONESIA</h4>
+                <p class="text-[10px] text-blue-200 mt-3 font-semibold uppercase tracking-wider">Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi</p>
+              </div>
+            </div>
           </div>
 
           <!-- Metrik Angka Utama -->
@@ -589,6 +688,92 @@
               </form>
             </div>
 
+            <!-- BARU: PANEL PENGATURAN PROFIL SEKOLAH UNTUK EDIT TULISAN SECARA DINAMIS -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xs">
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-indigo-600"></i> Pengaturan Informasi Profil Sekolah
+              </h3>
+              <p class="text-slate-400 text-xs mt-1 mb-6 leading-relaxed">
+                Sesuaikan semua isian tulisan profil sekolah yang tampil pada kartu profil di halaman utama Dashboard secara langsung.
+              </p>
+              
+              <form onsubmit="saveSchoolProfileSettings(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Nama Sekolah</label>
+                    <input type="text" id="setupSchoolName" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: SMP NEGERI 11 PALU">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">NPSN</label>
+                    <input type="text" id="setupNpsn" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: 40203578">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Bentuk Pendidikan</label>
+                    <input type="text" id="setupBentuk" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: SMP">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status</label>
+                    <input type="text" id="setupStatus" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Negeri">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kecamatan</label>
+                    <input type="text" id="setupKecamatan" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Kec. Tatanga">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kabupaten</label>
+                    <input type="text" id="setupKabupaten" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Kota Palu">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Provinsi</label>
+                    <input type="text" id="setupProvinsi" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Prov. Sulawesi Tengah">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Kepala Sekolah</label>
+                    <input type="text" id="setupKepsek" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Martha Taewa">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Operator</label>
+                    <input type="text" id="setupOperator" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Ahmad Andryanto">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Username / Email</label>
+                    <input type="text" id="setupUsername" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: smpnegeri11palu@gmail.com">
+                  </div>
+                  
+                  <div class="col-span-full border-t border-slate-100 my-2 pt-2"><span class="text-xs font-bold text-indigo-600 block">Kualifikasi Kurikulum &amp; BOSP</span></div>
+                  
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Sekolah Penggerak</label>
+                    <input type="text" id="setupPenggerak" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Ya / Tidak">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Implementasi Kurikulum</label>
+                    <input type="text" id="setupKurikulum" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Merdeka">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Tahun Ajaran</label>
+                    <input type="text" id="setupTahunAjaran" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: 2022/2023">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status BOSP</label>
+                    <input type="text" id="setupBosp" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Bersedia Menerima BOSP">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Bendahara BOSP</label>
+                    <input type="text" id="setupBendahara" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: AULIARIANI">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Matpel Informatika</label>
+                    <input type="text" id="setupInformatika" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-700" placeholder="Contoh: Diizinkan / Tidak Diizinkan">
+                  </div>
+                </div>
+                
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xs shadow-md shadow-indigo-500/10 cursor-pointer transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-save"></i> Simpan &amp; Terapkan Profil Sekolah
+                </button>
+              </form>
+            </div>
+
             <!-- PANEL KONEKSI ID SPREADSHEET (DIJAGA SELALU MUNCUL SANGAT FUNGSIONAL) -->
             <div class="bg-white border border-slate-200 rounded-3xl shadow-xs p-6 md:p-8 lg:col-span-2">
               <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -641,7 +826,7 @@
       </div>
       <div class="space-y-1">
         <h3 id="dialogTitle" class="font-bold text-slate-900 text-base">Pemberitahuan</h3>
-        <p id="dialogMessage" class="text-xs text-slate-500 leading-relaxed">Isi pesan informasi dialog</p>
+        <p id="dialogMessage" class="text-xs text-slate-500 leading-relaxed">Pesan dialog</p>
       </div>
       <div class="flex gap-2.5 pt-2" id="dialogButtonsContainer">
         <!-- Diisi dinamis -->
@@ -1315,7 +1500,7 @@
             maintainAspectRatio: false,
             scales: {
               x: { stacked: true, grid: { display: false } },
-              y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9' } }
+              y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9' } },
             },
             plugins: { legend: { display: false } }
           }
@@ -1728,6 +1913,58 @@
       const logoLogin = localStorage.getItem('app_logo_login') || "https://cdn.phototourl.com/free/2026-07-02-cd3e4ad2-8578-448d-9612-4e0ff511b32f.jpg";
       const logoSidebar = localStorage.getItem('app_logo_sidebar') || "https://cdn.phototourl.com/free/2026-07-02-938ecfce-eaff-4d67-a1dc-7c860ac071ea.jpg";
 
+      // BARU: Load data Profil Sekolah dengan nilai bawaan dari gambar jika kosong
+      const sName = localStorage.getItem('prof_school_name') || "SMP NEGERI 11 PALU";
+      const sNpsn = localStorage.getItem('prof_npsn') || "40203578";
+      const sBentuk = localStorage.getItem('prof_bentuk') || "SMP";
+      const sStatus = localStorage.getItem('prof_status') || "Negeri";
+      const sKec = localStorage.getItem('prof_kecamatan') || "Kec. Tatanga";
+      const sKab = localStorage.getItem('prof_kabupaten') || "Kota Palu";
+      const sProv = localStorage.getItem('prof_provinsi') || "Prov. Sulawesi Tengah";
+      const sKepsek = localStorage.getItem('prof_kepsek') || "Martha Taewa";
+      const sOperator = localStorage.getItem('prof_operator') || "Ahmad Andryanto";
+      const sUsername = localStorage.getItem('prof_username') || "smpnegeri11palu@gmail.com";
+      const sPenggerak = localStorage.getItem('prof_penggerak') || "Ya";
+      const sKurikulum = localStorage.getItem('prof_kurikulum') || "Merdeka";
+      const sTahunAjaran = localStorage.getItem('prof_tahun_ajaran') || "2022/2023";
+      const sBosp = localStorage.getItem('prof_bosp') || "Bersedia Menerima BOSP";
+      const sBendahara = localStorage.getItem('prof_bendahara') || "AULIARIANI";
+      const sInformatika = localStorage.getItem('prof_informatika') || "Diizinkan";
+
+      // Terapkan ke elemen tampilan Dashboard
+      const elSchName = document.getElementById('profileSchoolName');
+      if (elSchName) elSchName.innerText = sName;
+      const elNpsn = document.getElementById('profileNpsn');
+      if (elNpsn) elNpsn.innerText = sNpsn;
+      const elBentuk = document.getElementById('profileBentuk');
+      if (elBentuk) elBentuk.innerText = sBentuk;
+      const elStatus = document.getElementById('profileStatus');
+      if (elStatus) elStatus.innerText = sStatus;
+      const elKec = document.getElementById('profileKecamatan');
+      if (elKec) elKec.innerText = sKec;
+      const elKab = document.getElementById('profileKabupaten');
+      if (elKab) elKab.innerText = sKab;
+      const elProv = document.getElementById('profileProvinsi');
+      if (elProv) elProv.innerText = sProv;
+      const elKepsek = document.getElementById('profileKepsek');
+      if (elKepsek) elKepsek.innerText = sKepsek;
+      const elOperator = document.getElementById('profileOperator');
+      if (elOperator) elOperator.innerText = sOperator;
+      const elUsername = document.getElementById('profileUsername');
+      if (elUsername) elUsername.innerText = sUsername;
+      const elPenggerak = document.getElementById('profilePenggerak');
+      if (elPenggerak) elPenggerak.innerText = sPenggerak;
+      const elKurikulum = document.getElementById('profileKurikulum');
+      if (elKurikulum) elKurikulum.innerText = sKurikulum;
+      const elTahunAjaran = document.getElementById('profileTahunAjaran');
+      if (elTahunAjaran) elTahunAjaran.innerText = sTahunAjaran;
+      const elBosp = document.getElementById('profileBosp');
+      if (elBosp) elBosp.innerText = sBosp;
+      const elBendahara = document.getElementById('profileBendahara');
+      if (elBendahara) elBendahara.innerText = sBendahara;
+      const elInformatika = document.getElementById('profileInformatika');
+      if (elInformatika) elInformatika.innerText = sInformatika;
+
       // Halaman Login
       const loginAppTitle = document.getElementById('loginAppTitle');
       const loginAppSubtitle = document.getElementById('loginAppSubtitle');
@@ -1758,6 +1995,40 @@
       if (subSidebarInput) subSidebarInput.value = subversion;
       if (loginLogoInput) loginLogoInput.value = logoLogin;
       if (sidebarLogoInput) sidebarLogoInput.value = logoSidebar;
+
+      // Isi nilai input form pengeditan profil di Pengaturan DB
+      const inpSchName = document.getElementById('setupSchoolName');
+      if (inpSchName) inpSchName.value = sName;
+      const inpNpsn = document.getElementById('setupNpsn');
+      if (inpNpsn) inpNpsn.value = sNpsn;
+      const inpBentuk = document.getElementById('setupBentuk');
+      if (inpBentuk) inpBentuk.value = sBentuk;
+      const inpStatus = document.getElementById('setupStatus');
+      if (inpStatus) inpStatus.value = sStatus;
+      const inpKec = document.getElementById('setupKecamatan');
+      if (inpKec) inpKec.value = sKec;
+      const inpKab = document.getElementById('setupKabupaten');
+      if (inpKab) inpKab.value = sKab;
+      const inpProv = document.getElementById('setupProvinsi');
+      if (inpProv) inpProv.value = sProv;
+      const inpKepsek = document.getElementById('setupKepsek');
+      if (inpKepsek) inpKepsek.value = sKepsek;
+      const inpOperator = document.getElementById('setupOperator');
+      if (inpOperator) inpOperator.value = sOperator;
+      const inpUsername = document.getElementById('setupUsername');
+      if (inpUsername) inpUsername.value = sUsername;
+      const inpPenggerak = document.getElementById('setupPenggerak');
+      if (inpPenggerak) inpPenggerak.value = sPenggerak;
+      const inpKurikulum = document.getElementById('setupKurikulum');
+      if (inpKurikulum) inpKurikulum.value = sKurikulum;
+      const inpTahunAjaran = document.getElementById('setupTahunAjaran');
+      if (inpTahunAjaran) inpTahunAjaran.value = sTahunAjaran;
+      const inpBosp = document.getElementById('setupBosp');
+      if (inpBosp) inpBosp.value = sBosp;
+      const inpBendahara = document.getElementById('setupBendahara');
+      if (inpBendahara) inpBendahara.value = sBendahara;
+      const inpInformatika = document.getElementById('setupInformatika');
+      if (inpInformatika) inpInformatika.value = sInformatika;
     }
 
     // Simpan Pengaturan Branding Baru
@@ -1784,6 +2055,52 @@
 
       applyBranding();
       alertCustom("Branding Aplikasi Berhasil Diperbarui!", "Sukses", "success");
+    }
+
+    // BARU: Fungsi untuk menyimpan konfigurasi Profil Sekolah di Pengaturan DB
+    function saveSchoolProfileSettings(e) {
+      e.preventDefault();
+      const sName = document.getElementById('setupSchoolName').value.trim();
+      const sNpsn = document.getElementById('setupNpsn').value.trim();
+      const sBentuk = document.getElementById('setupBentuk').value.trim();
+      const sStatus = document.getElementById('setupStatus').value.trim();
+      const sKec = document.getElementById('setupKecamatan').value.trim();
+      const sKab = document.getElementById('setupKabupaten').value.trim();
+      const sProv = document.getElementById('setupProvinsi').value.trim();
+      const sKepsek = document.getElementById('setupKepsek').value.trim();
+      const sOperator = document.getElementById('setupOperator').value.trim();
+      const sUsername = document.getElementById('setupUsername').value.trim();
+      const sPenggerak = document.getElementById('setupPenggerak').value.trim();
+      const sKurikulum = document.getElementById('setupKurikulum').value.trim();
+      const sTahunAjaran = document.getElementById('setupTahunAjaran').value.trim();
+      const sBosp = document.getElementById('setupBosp').value.trim();
+      const sBendahara = document.getElementById('setupBendahara').value.trim();
+      const sInformatika = document.getElementById('setupInformatika').value.trim();
+
+      if(!sName) {
+        alertCustom("Nama sekolah wajib diisi!", "Peringatan", "error");
+        return;
+      }
+
+      localStorage.setItem('prof_school_name', sName);
+      localStorage.setItem('prof_npsn', sNpsn);
+      localStorage.setItem('prof_bentuk', sBentuk);
+      localStorage.setItem('prof_status', sStatus);
+      localStorage.setItem('prof_kecamatan', sKec);
+      localStorage.setItem('prof_kabupaten', sKab);
+      localStorage.setItem('prof_provinsi', sProv);
+      localStorage.setItem('prof_kepsek', sKepsek);
+      localStorage.setItem('prof_operator', sOperator);
+      localStorage.setItem('prof_username', sUsername);
+      localStorage.setItem('prof_penggerak', sPenggerak);
+      localStorage.setItem('prof_kurikulum', sKurikulum);
+      localStorage.setItem('prof_tahun_ajaran', sTahunAjaran);
+      localStorage.setItem('prof_bosp', sBosp);
+      localStorage.setItem('prof_bendahara', sBendahara);
+      localStorage.setItem('prof_informatika', sInformatika);
+
+      applyBranding();
+      alertCustom("Profil Sekolah Berhasil Diperbarui!", "Sukses", "success");
     }
 
     // ==================== MEMUAT PENGATURAN DATABASE (DENGAN TAMPILAN URL SPREADSHEET) ====================
