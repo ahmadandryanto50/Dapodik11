@@ -169,7 +169,7 @@
       <div id="demoNotice" class="hidden mb-4 p-3.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl text-xs flex gap-2.5">
         <i class="fa-solid fa-triangle-exclamation text-base mt-0.5 animate-bounce text-amber-600"></i>
         <div>
-          <span class="font-bold">Mode Preview Aktif!</span> Anda sedang menggunakan simulasi lokal. Akun bawaan: <span class="font-bold underline">admin</span> / <span class="font-bold underline">admin123</span> atau <span class="font-bold underline">user</span> / <span class="font-bold underline">user123</span>
+          <span class="font-bold">Mode Preview Hack!</span> Anda sedang menggunakan simulasi lokal. Akun bawaan: <span class="font-bold underline">admin</span> / <span class="font-bold underline">admin123</span> atau <span class="font-bold underline">user</span> / <span class="font-bold underline">user123</span>
         </div>
       </div>
       
@@ -428,19 +428,20 @@
                     </h4>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
-                        <span class="col-span-4 text-slate-400 font-semibold">Kecamatan</span>
-                        <strong id="profileKecamatan" class="col-span-8 text-slate-800">Tatanga</strong>
+                      <!-- MODIFIKASI: Dibuat bertumpuk (flex flex-col) untuk merapikan layout laptop & mencegah ketimpangan text -->
+                      <div class="flex flex-col gap-1 text-xs hover:bg-white px-3 py-2 rounded-2xl transition hover:shadow-xs border border-transparent hover:border-slate-100 bg-white/40">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kecamatan</span>
+                        <strong id="profileKecamatan" class="text-xs text-slate-800">Tatanga</strong>
                       </div>
                       
-                      <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
-                        <span class="col-span-4 text-slate-400 font-semibold">Kabupaten</span>
-                        <strong id="profileKabupaten" class="col-span-8 text-slate-800">Kota Palu</strong>
+                      <div class="flex flex-col gap-1 text-xs hover:bg-white px-3 py-2 rounded-2xl transition hover:shadow-xs border border-transparent hover:border-slate-100 bg-white/40">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kabupaten</span>
+                        <strong id="profileKabupaten" class="text-xs text-slate-800">Kota Palu</strong>
                       </div>
                       
-                      <div class="grid grid-cols-12 text-xs hover:bg-white px-1.5 py-1.5 rounded transition">
-                        <span class="col-span-4 text-slate-400 font-semibold">Provinsi</span>
-                        <strong id="profileProvinsi" class="col-span-8 text-slate-800">Sulawesi Tengah</strong>
+                      <div class="flex flex-col gap-1 text-xs hover:bg-white px-3 py-2 rounded-2xl transition hover:shadow-xs border border-transparent hover:border-slate-100 bg-white/40">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Provinsi</span>
+                        <strong id="profileProvinsi" class="text-xs text-slate-800">Sulawesi Tengah</strong>
                       </div>
                     </div>
                   </div>
@@ -616,7 +617,7 @@
                   </select>
                 </div>
 
-                <!-- Badge Sum/Total Data Aktif -->
+                <!-- Badge Sum/Total Data Hack -->
                 <div class="px-4 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold rounded-2xl flex items-center gap-1.5 shadow-2xs">
                   <i class="fa-solid fa-calculator text-indigo-500"></i>
                   <span>Total: <span id="totalRecords" class="text-indigo-900 font-extrabold text-sm">0</span> Data</span>
@@ -1220,7 +1221,7 @@
       const loginCloudUrlInput = document.getElementById('loginCloudUrlInput');
       if (loginCloudUrlInput) loginCloudUrlInput.value = cloudUrl;
       const loginConfigModal = document.getElementById('loginConfigModal');
-      if (loginConfigModal) loginConfigModal.classList.remove('hidden');
+      if (loginConfigModal) loginConfigModal.classList.add('hidden');
     }
 
     function closeLoginConfigModal() {
@@ -1278,34 +1279,49 @@
       }
     }
 
-    function saveLoginCloudSettings() {
-      const urlInput = document.getElementById('loginCloudUrlInput').value.trim();
-      if (!urlInput) {
-        alertCustom("Harap isi URL Google Apps Script Web App Anda!", "Form Kosong", "error");
-        return;
-      }
-      if (!urlInput.startsWith("https://script.google.com")) {
-        alertCustom("URL tidak valid! Harus diawali dengan https://script.google.com", "Form Tidak Valid", "error");
+    function saveSchoolProfileSettings(e) {
+      e.preventDefault();
+      const sName = document.getElementById('setupSchoolName').value.trim();
+      const sNpsn = document.getElementById('setupNpsn').value.trim();
+      const sBentuk = document.getElementById('setupBentuk').value.trim();
+      const sStatus = document.getElementById('setupStatus').value.trim();
+      const sKec = document.getElementById('setupKecamatan').value.trim();
+      const sKab = document.getElementById('setupKabupaten').value.trim();
+      const sProv = document.getElementById('setupProvinsi').value.trim();
+      const sKepsek = document.getElementById('setupKepsek').value.trim();
+      const sOperator = document.getElementById('setupOperator').value.trim();
+      const sUsername = document.getElementById('setupUsername').value.trim();
+      const sPenggerak = document.getElementById('setupPenggerak').value.trim();
+      const sKurikulum = document.getElementById('setupKurikulum').value.trim();
+      const sTahunAjaran = document.getElementById('setupTahunAjaran').value.trim();
+      const sBosp = document.getElementById('setupBosp').value.trim();
+      const sBendahara = document.getElementById('setupBendahara').value.trim();
+      const sInformatika = document.getElementById('setupInformatika').value.trim();
+
+      if(!sName) {
+        alertCustom("Nama sekolah wajib diisi!", "Peringatan", "error");
         return;
       }
 
-      localStorage.setItem('dapodik_cloud_url', urlInput);
-      updateConnectionBadge();
-      
-      const settingsInput = document.getElementById('cloudAppScriptUrl');
-      if (settingsInput) settingsInput.value = urlInput;
-      
-      closeLoginConfigModal();
-      alertCustom("Koneksi Database Cloud Berhasil Terhubung!\n\nSilakan login menggunakan akun administrator nyata Anda yang tersimpan di Google Sheet.", "Sukses Terhubung", "success");
-    }
+      localStorage.setItem('prof_school_name', sName);
+      localStorage.setItem('prof_npsn', sNpsn);
+      localStorage.setItem('prof_bentuk', sBentuk);
+      localStorage.setItem('prof_status', sStatus);
+      localStorage.setItem('prof_kecamatan', sKec);
+      localStorage.setItem('prof_kabupaten', sKab);
+      localStorage.setItem('prof_provinsi', sProv);
+      localStorage.setItem('prof_kepsek', sKepsek);
+      localStorage.setItem('prof_operator', sOperator);
+      localStorage.setItem('prof_username', sUsername);
+      localStorage.setItem('prof_penggerak', sPenggerak);
+      localStorage.setItem('prof_kurikulum', sKurikulum);
+      localStorage.setItem('prof_tahun_ajaran', sTahunAjaran);
+      localStorage.setItem('prof_bosp', sBosp);
+      localStorage.setItem('prof_bendahara', sBendahara);
+      localStorage.setItem('prof_informatika', sInformatika);
 
-    function resetLoginToLocalMode() {
-      localStorage.removeItem('dapodik_cloud_url');
-      const loginCloudUrlInput = document.getElementById('loginCloudUrlInput');
-      if (loginCloudUrlInput) loginCloudUrlInput.value = '';
-      updateConnectionBadge();
-      closeLoginConfigModal();
-      alertCustom("Sistem dialihkan kembali ke Mode Demo Lokal.", "Kembali ke Offline", "info");
+      applyBranding();
+      alertCustom("Profil Sekolah Berhasil Diperbarui!", "Sukses", "success");
     }
 
     // ==================== FITUR UTAMA: PROSES & RE-RENDER INFOGRAFIS DASHBOARD ====================
@@ -1688,7 +1704,7 @@
       
       document.querySelectorAll('.content-panel').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('aside nav button').forEach(el => {
-        el.classList.remove('bg-slate-800', 'text-indigo-500', 'border-l-4', 'border-indigo-500');
+        el.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition text-left font-semibold text-sm hover:bg-slate-800 hover:text-slate-200 cursor-pointer";
       });
 
       const panelCrud = document.getElementById('panel-crud');
